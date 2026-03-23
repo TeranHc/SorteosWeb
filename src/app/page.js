@@ -92,10 +92,57 @@ export default function SorteosPage() {
 
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", minHeight: "100vh", backgroundColor: "#FFFBF5" }}>
+      
+      {/* NAVBAR FLOTANTE */}
+      <nav style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: "rgba(20, 55, 104, 0.95)", 
+        backdropFilter: "blur(8px)",
+        zIndex: 1000,
+        padding: "16px 24px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        fontFamily: "system-ui, -apple-system, sans-serif" 
+      }}>
+        <div style={{ color: "#fff", fontWeight: "900", fontSize: "18px", letterSpacing: "1px" }}>
+          LA FORTUNA
+        </div>
+        
+        <div style={{ display: "flex", gap: "24px" }}>
+          {[
+            { name: "Inicio", link: "#inicio" },
+            { name: "Sorteos", link: "#sorteos" },
+            { name: "Ganadores", link: "#ganadores" },
+            { name: "Contacto", link: "#contacto" }
+          ].map((item) => (
+            <a 
+              key={item.name} 
+              href={item.link}
+              className="hover:text-orange-400 transition-colors duration-300 hidden sm:block"
+              style={{ 
+                color: "rgba(255,255,255,0.85)", 
+                textDecoration: "none", 
+                fontSize: "14px", 
+                fontWeight: "600",
+                textTransform: "uppercase",
+                letterSpacing: "1px"
+              }}
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
+      </nav>
+
       {/* HEADER */}
-      <header style={{
+      <header id="inicio" style={{
         background: "linear-gradient(135deg, #143768 0%, #000000 50%, #143768 100%)",
-        padding: "0",
+        padding: "100px 0 0", 
         position: "relative",
         overflow: "hidden",
       }}>
@@ -103,7 +150,7 @@ export default function SorteosPage() {
           position: "absolute", inset: 0,
           backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%)",
         }} />
-        <div style={{ position: "relative", textAlign: "center", padding: "52px 24px 44px" }}>
+        <div style={{ position: "relative", textAlign: "center", padding: "20px 24px 44px" }}>
           <div style={{ fontSize: "14px", fontFamily: "monospace", letterSpacing: "6px", color: "rgba(255,255,255,0.85)", marginBottom: "12px", textTransform: "uppercase" }}>
             🏆 Bienvenido a 🏆
           </div>
@@ -114,7 +161,6 @@ export default function SorteosPage() {
             letterSpacing: "-1px",
           }}>
             Sorteos
-            
             <span style={{ display: "block", color: "#FFF3D0" }}>La Fortuna</span>
           </h1>
           <p style={{ color: "rgba(255,255,255,0.9)", fontSize: "18px", margin: "16px auto 0", maxWidth: "480px", lineHeight: 1.6 }}>
@@ -132,7 +178,7 @@ export default function SorteosPage() {
       <main style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 20px 80px" }}>
 
         {/* PRIZE CARDS */}
-        <section>
+        <section id="sorteos" style={{ scrollMarginTop: "100px" }}>
           <h2 style={{ textAlign: "center", fontSize: "13px", letterSpacing: "5px", color: "#999", textTransform: "uppercase", marginBottom: "28px", fontFamily: "monospace" }}>
             — Sorteos Disponibles —
           </h2>
@@ -307,6 +353,110 @@ export default function SorteosPage() {
             <p style={{ fontSize: "18px", fontWeight: "600" }}>Selecciona un sorteo arriba para ver los números disponibles</p>
           </div>
         )}
+
+        {/* GANADORES SECTION CON NÚMERO DE BOLETO */}
+        <section id="ganadores" style={{ marginTop: "80px", textAlign: "center", scrollMarginTop: "100px" }}>
+          <h2 style={{ fontSize: "13px", letterSpacing: "5px", color: "#999", textTransform: "uppercase", marginBottom: "40px", fontFamily: "monospace" }}>
+            — Últimos Ganadores —
+          </h2>
+          <div style={{ display: "flex", justifyContent: "center", gap: "24px", flexWrap: "wrap", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+            {[
+              { name: "Carlos M.", prize: "Viaje Galápagos", date: "12 Mar", ticket: "42" },
+              { name: "Elena R.", prize: "Canasta Familiar", date: "10 Mar", ticket: "15" },
+              { name: "Andrés B.", prize: "Spa & Bienestar", date: "05 Mar", ticket: "08" }
+            ].map((g, i) => (
+              <div key={i} style={{ 
+                background: "#fff", 
+                padding: "24px 20px", 
+                borderRadius: "20px", 
+                boxShadow: "0 10px 30px rgba(0,0,0,0.05)", 
+                minWidth: "220px",
+                position: "relative",
+                border: "1px solid #f0f0f0"
+              }}>
+                {/* Insignia del número ganador */}
+                <div style={{
+                  position: "absolute",
+                  top: "-15px",
+                  right: "-15px",
+                  background: "#143768",
+                  color: "#fff",
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "900",
+                  fontSize: "16px",
+                  boxShadow: "0 4px 12px rgba(20, 55, 104, 0.4)",
+                  border: "3px solid #FFFBF5"
+                }}>
+                  #{g.ticket}
+                </div>
+
+                <div style={{ fontSize: "32px", marginBottom: "8px" }}>🏆</div>
+                <p style={{ fontWeight: "900", margin: "0 0 4px", color: "#1a1a1a", fontSize: "18px" }}>{g.name}</p>
+                <p style={{ color: "#FF6B35", fontSize: "14px", fontWeight: "700", margin: "0 0 12px" }}>{g.prize}</p>
+                
+                <div style={{ background: "#F3F4F6", borderRadius: "8px", padding: "6px 12px", display: "inline-block" }}>
+                  <p style={{ color: "#6b7280", fontSize: "12px", margin: "0", fontWeight: "600" }}>📅 {g.date}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CONTACTO SECTION NUEVA */}
+        <section id="contacto" style={{ 
+          marginTop: "80px", 
+          textAlign: "center", 
+          scrollMarginTop: "100px",
+          background: "#fff",
+          padding: "50px 20px",
+          borderRadius: "24px",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
+          fontFamily: "system-ui, -apple-system, sans-serif"
+        }}>
+          <h2 style={{ fontSize: "13px", letterSpacing: "5px", color: "#999", textTransform: "uppercase", marginBottom: "16px", fontFamily: "monospace" }}>
+            — Contáctanos —
+          </h2>
+          <h3 style={{ fontSize: "32px", fontWeight: "900", color: "#1a1a1a", margin: "0 0 16px", letterSpacing: "-0.5px" }}>
+            ¿Tienes alguna duda o quieres confirmar tu reserva?
+          </h3>
+          <p style={{ color: "#666", maxWidth: "600px", margin: "0 auto 32px", lineHeight: "1.6", fontSize: "16px" }}>
+            Escríbenos directamente a nuestro WhatsApp o envíanos un correo. Nuestro equipo está listo para ayudarte con tus números y explicarte los métodos de pago.
+          </p>
+          <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
+            <a href="https://wa.me/593999999999" target="_blank" rel="noopener noreferrer" 
+               className="hover:scale-105 transition-transform duration-300"
+               style={{ 
+                 display: "flex", alignItems: "center", gap: "10px", 
+                 background: "#22C55E", color: "#fff", 
+                 padding: "14px 28px", borderRadius: "14px", 
+                 textDecoration: "none", fontWeight: "800", fontSize: "16px",
+                 boxShadow: "0 8px 20px rgba(34,197,94,0.3)"
+               }}>
+              <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+              </svg>
+              Escribir al WhatsApp
+            </a>
+            <a href="mailto:info@sorteoslafortuna.com" 
+               className="hover:scale-105 transition-transform duration-300"
+               style={{ 
+                 display: "flex", alignItems: "center", gap: "10px", 
+                 background: "#143768", color: "#fff", 
+                 padding: "14px 28px", borderRadius: "14px", 
+                 textDecoration: "none", fontWeight: "800", fontSize: "16px",
+                 boxShadow: "0 8px 20px rgba(20, 55, 104, 0.3)"
+               }}>
+              <span style={{ fontSize: "20px" }}>✉️</span>
+              Enviar Correo
+            </a>
+          </div>
+        </section>
+
       </main>
 
       {/* MODAL */}
@@ -315,7 +465,7 @@ export default function SorteosPage() {
           style={{
             position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            zIndex: 999, padding: "20px",
+            zIndex: 9999, padding: "20px", 
           }}
           onClick={() => setModal(null)}
         >
@@ -345,7 +495,7 @@ export default function SorteosPage() {
               </p>
             </div>
             <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "24px" }}>
-              Guarda una captura de pantalla como comprobante 📸
+              Guarda una captura de pantalla como comprobante y contáctanos para el pago 📸
             </p>
             <button
               onClick={() => setModal(null)}
@@ -354,22 +504,16 @@ export default function SorteosPage() {
                 borderRadius: "14px", padding: "14px 40px",
                 fontSize: "16px", fontWeight: "800", cursor: "pointer",
                 boxShadow: `0 6px 20px ${modal.prize.color}50`,
+                transition: "transform 0.2s",
               }}
+              className="hover:scale-105"
             >
-              ¡Listo!
+              ¡Entendido!
             </button>
           </div>
         </div>
       )}
 
-      <style>{`
-        @keyframes popIn {
-          from { opacity: 0; transform: scale(0.7); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-        * { box-sizing: border-box; }
-        button:hover:not(:disabled) { filter: brightness(0.95); }
-      `}</style>
       {/* FOOTER */}
       <footer style={{ 
         background: "#1a1a1a", 
@@ -377,9 +521,9 @@ export default function SorteosPage() {
         padding: "60px 20px 30px", 
         marginTop: "40px",
         position: "relative",
-        overflow: "hidden"
+        overflow: "hidden",
+        fontFamily: "system-ui, -apple-system, sans-serif"
       }}>
-        {/* Adorno superior (onda invertida) */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "40px", overflow: "hidden", transform: "rotate(180deg)" }}>
           <svg viewBox="0 0 1200 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
             <path d="M0,40 C300,0 600,40 900,10 C1050,0 1150,20 1200,40 Z" fill="#FFFBF5" />
@@ -401,16 +545,24 @@ export default function SorteosPage() {
               <p style={{ color: "#aaa", fontSize: "14px", lineHeight: "1.6" }}>
                 Llevando alegría y premios increíbles a todos nuestros participantes desde Guayaquil para todo el país.
               </p>
-              <div style={{ display: "flex", gap: "12px", marginTop: "20px" }}>
-                {['Facebook', 'Instagram', 'WhatsApp'].map(social => (
-                  <div key={social} style={{ 
-                    width: "36px", height: "36px", borderRadius: "50%", 
-                    background: "#333", display: "flex", alignItems: "center", 
-                    justifyContent: "center", cursor: "pointer", transition: "0.3s" 
-                  }}>
-                    <span style={{ fontSize: "14px" }}>{social[0]}</span>
-                  </div>
-                ))}
+              
+              {/* Iconos de Redes Sociales */}
+              <div className="flex gap-4 mt-6">
+                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition-colors duration-300 group">
+                  <svg className="w-5 h-5 fill-current text-gray-400 group-hover:text-white" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 transition-colors duration-300 group">
+                  <svg className="w-5 h-5 fill-current text-gray-400 group-hover:text-white" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 transition-colors duration-300 group">
+                  <svg className="w-5 h-5 fill-current text-gray-400 group-hover:text-white" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+                  </svg>
+                </a>
               </div>
             </div>
 
@@ -437,9 +589,9 @@ export default function SorteosPage() {
                 Información
               </h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "14px", color: "#aaa", lineHeight: "2" }}>
-                <li style={{ cursor: "pointer" }}>Términos y Condiciones</li>
-                <li style={{ cursor: "pointer" }}>Preguntas Frecuentes</li>
-                <li style={{ cursor: "pointer" }}>Contacto directo</li>
+                <li style={{ cursor: "pointer" }} className="hover:text-white transition-colors">Términos y Condiciones</li>
+                <li style={{ cursor: "pointer" }} className="hover:text-white transition-colors">Preguntas Frecuentes</li>
+                <li style={{ cursor: "pointer" }} className="hover:text-white transition-colors">Aviso de Privacidad</li>
               </ul>
             </div>
           </div>
@@ -452,6 +604,18 @@ export default function SorteosPage() {
           </div>
         </div>
       </footer>
+
+      <style>{`
+        html { 
+          scroll-behavior: smooth; 
+        }
+        @keyframes popIn {
+          from { opacity: 0; transform: scale(0.7); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        * { box-sizing: border-box; }
+        button:hover:not(:disabled) { filter: brightness(0.95); }
+      `}</style>
     </div>
   );
 }
