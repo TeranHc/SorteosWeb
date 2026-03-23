@@ -1,26 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&family=Oswald:wght@600;700&family=Roboto:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Casino Palette */
+  --bg-main: #0B0B0B;
+  --bg-secondary: #161616;
+  --bg-elevated: #1E1E1E;
+  --primary-red: #C1121F;
+  --red-hover: #E63946;
+  --gold-accent: #D4AF37;
+  --gold-glow: rgba(212, 175, 55, 0.25);
+  --gold-border: rgba(212, 175, 55, 0.18);
+  
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8B8B8;
+  --text-muted: #7A7A7A;
+  
+  /* Status Colors */
+  --success-green: #22C55E;
+  --occupied-red: #FCA5A5;
+  
+  /* Borders */
+  --border-color: rgba(212, 175, 55, 0.18);
+  
+  /* Spacing & Sizing */
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --radius-sm: 8px;
+  
+  /* Font Families */
+  --font-brand: 'Bebas Neue', sans-serif;
+  --font-ui: 'Montserrat', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+  --font-numbers: 'Oswald', sans-serif;
+
+  --background: #0B0B0B;
+  --foreground: #FFFFFF;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0B0B0B;
+    --foreground: #FFFFFF;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Utility Styles */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--gold-accent);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--red-hover);
 }
