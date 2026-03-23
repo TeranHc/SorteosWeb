@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const PRIZES = [
   {
@@ -60,8 +60,24 @@ export default function SorteosPage() {
   const [takenMap, setTakenMap] = useState(initialTaken);
   const [userPicks, setUserPicks] = useState({});
   const [modal, setModal] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem("darkMode");
+    if (savedDarkMode !== null) {
+      setDarkMode(JSON.parse(savedDarkMode));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   const activePrize = PRIZES.find((p) => p.id === selected) || null;
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   const handleNumberClick = (num) => {
     if (!selected) return;
@@ -91,7 +107,7 @@ export default function SorteosPage() {
   };
 
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", minHeight: "100vh", backgroundColor: "#FFFBF5" }}>
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", minHeight: "100vh", backgroundColor: darkMode ? "#1a1a1a" : "var(--brand-cream)", color: darkMode ? "#fff" : "#1a1a1a", transition: "all 0.3s ease" }}>
       
       {/* NAVBAR FLOTANTE */}
       <nav style={{
@@ -99,7 +115,7 @@ export default function SorteosPage() {
         top: 0,
         left: 0,
         right: 0,
-        backgroundColor: "rgba(20, 55, 104, 0.95)", 
+        backgroundColor: darkMode ? "rgba(30, 30, 30, 0.95)" : "rgba(20, 55, 104, 0.95)", 
         backdropFilter: "blur(8px)",
         zIndex: 1000,
         padding: "16px 24px",
@@ -107,13 +123,14 @@ export default function SorteosPage() {
         justifyContent: "space-between",
         alignItems: "center",
         borderBottom: "1px solid rgba(255,255,255,0.1)",
-        fontFamily: "system-ui, -apple-system, sans-serif" 
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        transition: "all 0.3s ease"
       }}>
         <div style={{ color: "#fff", fontWeight: "900", fontSize: "18px", letterSpacing: "1px" }}>
           LA FORTUNA
         </div>
         
-        <div style={{ display: "flex", gap: "24px" }}>
+        <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
           {[
             { name: "Inicio", link: "#inicio" },
             { name: "Sorteos", link: "#sorteos" },
@@ -136,19 +153,48 @@ export default function SorteosPage() {
               {item.name}
             </a>
           ))}
+          
+          {/* Botón Toggle Modo Nocturno */}
+          <button
+            onClick={toggleDarkMode}
+            style={{
+              background: "rgba(255,255,255,0.2)",
+              border: "1px solid rgba(255,255,255,0.3)",
+              color: "#fff",
+              width: "40px",
+              height: "40px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "18px",
+              transition: "all 0.3s ease"
+            }}
+            title={darkMode ? "Modo claro" : "Modo oscuro"}
+            onMouseEnter={(e) => e.target.style.background = "rgba(255,255,255,0.3)"}
+            onMouseLeave={(e) => e.target.style.background = "rgba(255,255,255,0.2)"}
+          >
+            {darkMode ? "☀️" : "🌙"}
+          </button>
         </div>
       </nav>
 
       {/* HEADER */}
       <header id="inicio" style={{
-        background: "linear-gradient(135deg, #143768 0%, #000000 50%, #143768 100%)",
+        background: darkMode 
+          ? "linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%)"
+          : "linear-gradient(135deg, #143768 0%, #000000 50%, #143768 100%)",
         padding: "100px 0 0", 
         position: "relative",
         overflow: "hidden",
+        transition: "all 0.3s ease"
       }}>
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%)",
+          backgroundImage: darkMode 
+            ? "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.02) 0%, transparent 40%)"
+            : "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%)",
         }} />
         <div style={{ position: "relative", textAlign: "center", padding: "20px 24px 44px" }}>
           <div style={{ fontSize: "14px", fontFamily: "monospace", letterSpacing: "6px", color: "rgba(255,255,255,0.85)", marginBottom: "12px", textTransform: "uppercase" }}>
@@ -195,12 +241,12 @@ export default function SorteosPage() {
                     border: isActive ? `3px solid ${prize.color}` : "3px solid transparent",
                     borderRadius: "20px",
                     padding: "24px 20px",
-                    background: isActive ? prize.accent : "#fff",
+                    background: isActive ? prize.accent : (darkMode ? "#2a2a2a" : "#fff"),
                     cursor: "pointer",
                     textAlign: "left",
                     boxShadow: isActive
                       ? `0 8px 32px ${prize.color}40`
-                      : "0 2px 12px rgba(0,0,0,0.07)",
+                      : (darkMode ? "0 2px 12px rgba(0,0,0,0.3)" : "0 2px 12px rgba(0,0,0,0.07)"),
                     transition: "all 0.25s ease",
                     transform: isActive ? "translateY(-4px)" : "none",
                     position: "relative",
@@ -215,13 +261,13 @@ export default function SorteosPage() {
                     }}>ACTIVO</div>
                   )}
                   <div style={{ fontSize: "42px", marginBottom: "10px" }}>{prize.emoji}</div>
-                  <h3 style={{ margin: "0 0 6px", fontSize: "17px", fontWeight: "800", color: "#1a1a1a" }}>{prize.name}</h3>
-                  <p style={{ margin: "0 0 14px", fontSize: "13px", color: "#666", lineHeight: 1.5 }}>{prize.description}</p>
+                  <h3 style={{ margin: "0 0 6px", fontSize: "17px", fontWeight: "800", color: darkMode ? "#ffffff" : "#1a1a1a" }}>{prize.name}</h3>
+                  <p style={{ margin: "0 0 14px", fontSize: "13px", color: darkMode ? "#aaa" : "#666", lineHeight: 1.5 }}>{prize.description}</p>
                   <div style={{ display: "flex", gap: "8px" }}>
-                    <span style={{ background: "#FEF2F2", color: "#EF4444", borderRadius: "8px", padding: "3px 10px", fontSize: "12px", fontWeight: "700" }}>
+                    <span style={{ background: darkMode ? "#3d2a2a" : "#FEF2F2", color: "#EF4444", borderRadius: "8px", padding: "3px 10px", fontSize: "12px", fontWeight: "700" }}>
                       🔴 {taken} ocupados
                     </span>
-                    <span style={{ background: "#F0FDF4", color: "#22C55E", borderRadius: "8px", padding: "3px 10px", fontSize: "12px", fontWeight: "700" }}>
+                    <span style={{ background: darkMode ? "#2a3d2a" : "#F0FDF4", color: "#22C55E", borderRadius: "8px", padding: "3px 10px", fontSize: "12px", fontWeight: "700" }}>
                       🟢 {free} libres
                     </span>
                   </div>
@@ -234,18 +280,19 @@ export default function SorteosPage() {
         {/* NUMBER GRID */}
         {activePrize && (
           <section style={{
-            background: "#fff",
+            background: darkMode ? "#2a2a2a" : "#fff",
             borderRadius: "24px",
             padding: "36px 28px",
-            boxShadow: "0 4px 32px rgba(0,0,0,0.08)",
+            boxShadow: darkMode ? "0 4px 32px rgba(0,0,0,0.3)" : "0 4px 32px rgba(0,0,0,0.08)",
             border: `2px solid ${activePrize.color}30`,
+            transition: "all 0.3s ease",
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px", marginBottom: "28px" }}>
               <div>
-                <h2 style={{ margin: 0, fontSize: "24px", fontWeight: "800", color: "#1a1a1a" }}>
+                <h2 style={{ margin: 0, fontSize: "24px", fontWeight: "800", color: darkMode ? "#ffffff" : "#1a1a1a" }}>
                   {activePrize.emoji} {activePrize.name}
                 </h2>
-                <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#888" }}>
+                <p style={{ margin: "4px 0 0", fontSize: "14px", color: darkMode ? "#888" : "#888" }}>
                   Selecciona tus números de la suerte
                 </p>
               </div>
@@ -255,7 +302,7 @@ export default function SorteosPage() {
                   { color: "#FCA5A5", label: "Ocupado" },
                   { color: activePrize.color, label: "Tu selección" },
                 ].map((l) => (
-                  <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#555" }}>
+                  <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: darkMode ? "#bbb" : "#555" }}>
                     <div style={{ width: "16px", height: "16px", borderRadius: "4px", background: l.color }} />
                     {l.label}
                   </div>
@@ -273,8 +320,8 @@ export default function SorteosPage() {
               {Array.from({ length: activePrize.total }, (_, i) => i + 1).map((num) => {
                 const taken = takenMap[activePrize.id]?.has(num);
                 const picked = userPicks[activePrize.id]?.has(num);
-                let bg = "#F3F4F6";
-                let color = "#374151";
+                let bg = darkMode ? "#3a3a3a" : "#F3F4F6";
+                let color = darkMode ? "#ddd" : "#374151";
                 let border = "2px solid transparent";
                 let cursor = "pointer";
                 let shadow = "none";
@@ -306,7 +353,7 @@ export default function SorteosPage() {
 
             {/* Summary & Reserve */}
             <div style={{
-              background: activePrize.accent,
+              background: darkMode ? "#3a3a3a" : activePrize.accent,
               borderRadius: "16px",
               padding: "20px 24px",
               display: "flex",
@@ -315,10 +362,11 @@ export default function SorteosPage() {
               flexWrap: "wrap",
               gap: "16px",
               border: `1px solid ${activePrize.color}30`,
+              transition: "all 0.3s ease",
             }}>
               <div>
-                <p style={{ margin: 0, fontSize: "14px", color: "#666" }}>Números seleccionados:</p>
-                <p style={{ margin: "4px 0 0", fontSize: "16px", fontWeight: "800", color: "#1a1a1a" }}>
+                <p style={{ margin: 0, fontSize: "14px", color: darkMode ? "#aaa" : "#666" }}>Números seleccionados:</p>
+                <p style={{ margin: "4px 0 0", fontSize: "16px", fontWeight: "800", color: darkMode ? "#ffffff" : "#1a1a1a" }}>
                   {userPicks[activePrize.id]?.size > 0
                     ? [...(userPicks[activePrize.id])].sort((a, b) => a - b).join(", ")
                     : "Ninguno aún"}
@@ -348,7 +396,7 @@ export default function SorteosPage() {
         )}
 
         {!selected && (
-          <div style={{ textAlign: "center", padding: "60px 0", color: "#bbb" }}>
+          <div style={{ textAlign: "center", padding: "60px 0", color: darkMode ? "#666" : "#bbb" }}>
             <div style={{ fontSize: "56px", marginBottom: "16px" }}>☝️</div>
             <p style={{ fontSize: "18px", fontWeight: "600" }}>Selecciona un sorteo arriba para ver los números disponibles</p>
           </div>
@@ -356,7 +404,7 @@ export default function SorteosPage() {
 
         {/* GANADORES SECTION CON NÚMERO DE BOLETO */}
         <section id="ganadores" style={{ marginTop: "80px", textAlign: "center", scrollMarginTop: "100px" }}>
-          <h2 style={{ fontSize: "13px", letterSpacing: "5px", color: "#999", textTransform: "uppercase", marginBottom: "40px", fontFamily: "monospace" }}>
+          <h2 style={{ fontSize: "13px", letterSpacing: "5px", color: darkMode ? "#666" : "#999", textTransform: "uppercase", marginBottom: "40px", fontFamily: "monospace" }}>
             — Últimos Ganadores —
           </h2>
           <div style={{ display: "flex", justifyContent: "center", gap: "24px", flexWrap: "wrap", fontFamily: "system-ui, -apple-system, sans-serif" }}>
@@ -366,13 +414,14 @@ export default function SorteosPage() {
               { name: "Andrés B.", prize: "Spa & Bienestar", date: "05 Mar", ticket: "08" }
             ].map((g, i) => (
               <div key={i} style={{ 
-                background: "#fff", 
+                background: darkMode ? "#2a2a2a" : "#fff", 
                 padding: "24px 20px", 
                 borderRadius: "20px", 
-                boxShadow: "0 10px 30px rgba(0,0,0,0.05)", 
+                boxShadow: darkMode ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(0,0,0,0.05)", 
                 minWidth: "220px",
                 position: "relative",
-                border: "1px solid #f0f0f0"
+                border: darkMode ? "1px solid #3a3a3a" : "1px solid #f0f0f0",
+                transition: "all 0.3s ease"
               }}>
                 {/* Insignia del número ganador */}
                 <div style={{
@@ -396,11 +445,11 @@ export default function SorteosPage() {
                 </div>
 
                 <div style={{ fontSize: "32px", marginBottom: "8px" }}>🏆</div>
-                <p style={{ fontWeight: "900", margin: "0 0 4px", color: "#1a1a1a", fontSize: "18px" }}>{g.name}</p>
+                <p style={{ fontWeight: "900", margin: "0 0 4px", color: darkMode ? "#ffffff" : "#1a1a1a", fontSize: "18px" }}>{g.name}</p>
                 <p style={{ color: "#FF6B35", fontSize: "14px", fontWeight: "700", margin: "0 0 12px" }}>{g.prize}</p>
                 
-                <div style={{ background: "#F3F4F6", borderRadius: "8px", padding: "6px 12px", display: "inline-block" }}>
-                  <p style={{ color: "#6b7280", fontSize: "12px", margin: "0", fontWeight: "600" }}>📅 {g.date}</p>
+                <div style={{ background: darkMode ? "#3a3a3a" : "#F3F4F6", borderRadius: "8px", padding: "6px 12px", display: "inline-block", transition: "all 0.3s ease" }}>
+                  <p style={{ color: darkMode ? "#bbb" : "#6b7280", fontSize: "12px", margin: "0", fontWeight: "600" }}>📅 {g.date}</p>
                 </div>
               </div>
             ))}
@@ -412,19 +461,20 @@ export default function SorteosPage() {
           marginTop: "80px", 
           textAlign: "center", 
           scrollMarginTop: "100px",
-          background: "#fff",
+          background: darkMode ? "#2a2a2a" : "#fff",
           padding: "50px 20px",
           borderRadius: "24px",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
-          fontFamily: "system-ui, -apple-system, sans-serif"
+          boxShadow: darkMode ? "0 10px 40px rgba(0,0,0,0.3)" : "0 10px 40px rgba(0,0,0,0.04)",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          transition: "all 0.3s ease"
         }}>
-          <h2 style={{ fontSize: "13px", letterSpacing: "5px", color: "#999", textTransform: "uppercase", marginBottom: "16px", fontFamily: "monospace" }}>
+          <h2 style={{ fontSize: "13px", letterSpacing: "5px", color: darkMode ? "#666" : "#999", textTransform: "uppercase", marginBottom: "16px", fontFamily: "monospace" }}>
             — Contáctanos —
           </h2>
-          <h3 style={{ fontSize: "32px", fontWeight: "900", color: "#1a1a1a", margin: "0 0 16px", letterSpacing: "-0.5px" }}>
+          <h3 style={{ fontSize: "32px", fontWeight: "900", color: darkMode ? "#ffffff" : "#1a1a1a", margin: "0 0 16px", letterSpacing: "-0.5px" }}>
             ¿Tienes alguna duda o quieres confirmar tu reserva?
           </h3>
-          <p style={{ color: "#666", maxWidth: "600px", margin: "0 auto 32px", lineHeight: "1.6", fontSize: "16px" }}>
+          <p style={{ color: darkMode ? "#bbb" : "#666", maxWidth: "600px", margin: "0 auto 32px", lineHeight: "1.6", fontSize: "16px" }}>
             Escríbenos directamente a nuestro WhatsApp o envíanos un correo. Nuestro equipo está listo para ayudarte con tus números y explicarte los métodos de pago.
           </p>
           <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
@@ -472,29 +522,35 @@ export default function SorteosPage() {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff", borderRadius: "28px", padding: "48px 40px",
-              maxWidth: "420px", width: "100%", textAlign: "center",
+              background: darkMode ? "#2a2a2a" : "#fff", 
+              borderRadius: "28px", 
+              padding: "48px 40px",
+              maxWidth: "420px", 
+              width: "100%", 
+              textAlign: "center",
               boxShadow: "0 24px 80px rgba(0,0,0,0.25)",
               animation: "popIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275)",
+              transition: "all 0.3s ease"
             }}
           >
             <div style={{ fontSize: "64px", marginBottom: "16px" }}>🎉</div>
-            <h2 style={{ margin: "0 0 8px", fontSize: "26px", fontWeight: "900", color: "#1a1a1a" }}>
+            <h2 style={{ margin: "0 0 8px", fontSize: "26px", fontWeight: "900", color: darkMode ? "#ffffff" : "#1a1a1a" }}>
               ¡Reserva Exitosa!
             </h2>
-            <p style={{ color: "#666", marginBottom: "20px", fontSize: "16px", lineHeight: 1.6 }}>
+            <p style={{ color: darkMode ? "#bbb" : "#666", marginBottom: "20px", fontSize: "16px", lineHeight: 1.6 }}>
               Reservaste los números para <strong>{modal.prize.name}</strong>
             </p>
             <div style={{
-              background: modal.prize.accent, borderRadius: "14px", padding: "16px 20px",
+              background: darkMode ? "#3a3a3a" : modal.prize.accent, borderRadius: "14px", padding: "16px 20px",
               marginBottom: "28px", border: `1px solid ${modal.prize.color}30`,
+              transition: "all 0.3s ease"
             }}>
-              <p style={{ margin: 0, fontSize: "13px", color: "#888", marginBottom: "6px" }}>Tus números:</p>
+              <p style={{ margin: 0, fontSize: "13px", color: darkMode ? "#999" : "#888", marginBottom: "6px" }}>Tus números:</p>
               <p style={{ margin: 0, fontSize: "22px", fontWeight: "900", color: modal.prize.color, letterSpacing: "2px" }}>
                 {modal.nums.sort((a, b) => a - b).join("  ·  ")}
               </p>
             </div>
-            <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "24px" }}>
+            <p style={{ color: darkMode ? "#888" : "#aaa", fontSize: "13px", marginBottom: "24px" }}>
               Guarda una captura de pantalla como comprobante y contáctanos para el pago 📸
             </p>
             <button
@@ -516,17 +572,18 @@ export default function SorteosPage() {
 
       {/* FOOTER */}
       <footer style={{ 
-        background: "#1a1a1a", 
+        background: darkMode ? "#0f0f0f" : "#1a1a1a", 
         color: "#fff", 
         padding: "60px 20px 30px", 
         marginTop: "40px",
         position: "relative",
         overflow: "hidden",
-        fontFamily: "system-ui, -apple-system, sans-serif"
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        transition: "all 0.3s ease"
       }}>
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "40px", overflow: "hidden", transform: "rotate(180deg)" }}>
           <svg viewBox="0 0 1200 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
-            <path d="M0,40 C300,0 600,40 900,10 C1050,0 1150,20 1200,40 Z" fill="#FFFBF5" />
+            <path d="M0,40 C300,0 600,40 900,10 C1050,0 1150,20 1200,40 Z" fill={darkMode ? "#1a1a1a" : "#FFFBF5"} />
           </svg>
         </div>
 
@@ -542,7 +599,7 @@ export default function SorteosPage() {
               <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#FF6B35", margin: "0 0 16px" }}>
                 Sorteos La Fortuna
               </h3>
-              <p style={{ color: "#aaa", fontSize: "14px", lineHeight: "1.6" }}>
+              <p style={{ color: darkMode ? "#888" : "#aaa", fontSize: "14px", lineHeight: "1.6" }}>
                 Llevando alegría y premios increíbles a todos nuestros participantes desde Guayaquil para todo el país.
               </p>
               
@@ -568,14 +625,15 @@ export default function SorteosPage() {
 
             {/* Columna 2: Pagos */}
             <div>
-              <h4 style={{ fontSize: "14px", letterSpacing: "2px", textTransform: "uppercase", color: "#666", marginBottom: "20px" }}>
+              <h4 style={{ fontSize: "14px", letterSpacing: "2px", textTransform: "uppercase", color: darkMode ? "#555" : "#666", marginBottom: "20px" }}>
                 Métodos de Pago
               </h4>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                 {['💳 Visa', '💳 Master', '🏦 Transferencia', '📱 Deuna!'].map(metodo => (
                   <span key={metodo} style={{ 
-                    background: "#262626", padding: "6px 12px", borderRadius: "8px", 
-                    fontSize: "12px", color: "#ccc", border: "1px solid #333" 
+                    background: darkMode ? "#3a3a3a" : "#262626", padding: "6px 12px", borderRadius: "8px", 
+                    fontSize: "12px", color: darkMode ? "#bbb" : "#ccc", border: darkMode ? "1px solid #4a4a4a" : "1px solid #333",
+                    transition: "all 0.3s ease"
                   }}>
                     {metodo}
                   </span>
@@ -585,10 +643,10 @@ export default function SorteosPage() {
 
             {/* Columna 3: Legal/Info */}
             <div>
-              <h4 style={{ fontSize: "14px", letterSpacing: "2px", textTransform: "uppercase", color: "#666", marginBottom: "20px" }}>
+              <h4 style={{ fontSize: "14px", letterSpacing: "2px", textTransform: "uppercase", color: darkMode ? "#555" : "#666", marginBottom: "20px" }}>
                 Información
               </h4>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "14px", color: "#aaa", lineHeight: "2" }}>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "14px", color: darkMode ? "#888" : "#aaa", lineHeight: "2" }}>
                 <li style={{ cursor: "pointer" }} className="hover:text-white transition-colors">Términos y Condiciones</li>
                 <li style={{ cursor: "pointer" }} className="hover:text-white transition-colors">Preguntas Frecuentes</li>
                 <li style={{ cursor: "pointer" }} className="hover:text-white transition-colors">Aviso de Privacidad</li>
@@ -596,9 +654,9 @@ export default function SorteosPage() {
             </div>
           </div>
 
-          <hr style={{ border: "0", borderTop: "1px solid #333", margin: "40px 0 20px" }} />
+          <hr style={{ border: "0", borderTop: `1px solid ${darkMode ? "#3a3a3a" : "#333"}`, margin: "40px 0 20px", transition: "all 0.3s ease" }} />
 
-          <div style={{ textAlign: "center", color: "#666", fontSize: "12px" }}>
+          <div style={{ textAlign: "center", color: darkMode ? "#555" : "#666", fontSize: "12px" }}>
             <p style={{ marginBottom: "8px" }}>© 2026 Sorteos La Fortuna. Todos los derechos reservados.</p>
             <p style={{ fontStyle: "italic" }}>🔞 El juego es solo para mayores de 18 años. Juega con responsabilidad.</p>
           </div>
