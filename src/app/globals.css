@@ -2,27 +2,35 @@
 @import "tailwindcss";
 
 :root {
-  /* Casino Palette */
-  --bg-main: #0B0B0B;
-  --bg-secondary: #161616;
-  --bg-elevated: #1E1E1E;
-  --primary-red: #C1121F;
-  --red-hover: #E63946;
-  --gold-accent: #D4AF37;
-  --gold-glow: rgba(212, 175, 55, 0.25);
-  --gold-border: rgba(212, 175, 55, 0.18);
+  /* MODO CLÁSICO: Paleta Premium Modern Light */
+  --bg-main: #F8F9FA;
+  --bg-main-rgb: 248, 249, 250;
+  --bg-secondary: #FFFFFF;
+  --bg-secondary-rgb: 255, 255, 255;
+  --bg-elevated: #F3F4F6;
+  --bg-elevated-rgb: 243, 244, 246;
+  --primary-red: #DC2626;
+  --primary-red-rgb: 220, 38, 38;
+  --red-hover: #B91C1C;
+  --gold-accent: #D97706;
+  --gold-accent-rgb: 217, 119, 6;
+  --gold-glow: rgba(217, 119, 6, 0.25);
+  --gold-border: rgba(217, 119, 6, 0.18);
   
-  /* Text Colors */
-  --text-primary: #FFFFFF;
-  --text-secondary: #B8B8B8;
-  --text-muted: #7A7A7A;
+  /* Text Colors - Modo Clásico */
+  --text-primary: #1F2937;
+  --text-primary-rgb: 31, 41, 55;
+  --text-secondary: #6B7280;
+  --text-secondary-rgb: 107, 114, 128;
+  --text-muted: #9CA3AF;
+  --text-muted-rgb: 156, 163, 175;
   
   /* Status Colors */
-  --success-green: #22C55E;
+  --success-green: #059669;
   --occupied-red: #FCA5A5;
   
   /* Borders */
-  --border-color: rgba(212, 175, 55, 0.18);
+  --border-color: rgba(217, 119, 6, 0.18);
   
   /* Spacing & Sizing */
   --radius-card: 16px;
@@ -35,6 +43,34 @@
   --font-body: 'Roboto', sans-serif;
   --font-numbers: 'Oswald', sans-serif;
 
+  --background: #F8F9FA;
+  --foreground: #1F2937;
+}
+
+/* MODO NOCTURNO: Paleta Casino Premium */
+[data-theme="dark"] {
+  --bg-main: #0B0B0B;
+  --bg-main-rgb: 11, 11, 11;
+  --bg-secondary: #161616;
+  --bg-secondary-rgb: 22, 22, 22;
+  --bg-elevated: #1E1E1E;
+  --bg-elevated-rgb: 30, 30, 30;
+  --primary-red: #C1121F;
+  --primary-red-rgb: 193, 18, 31;
+  --red-hover: #E63946;
+  --gold-accent: #D4AF37;
+  --gold-accent-rgb: 212, 175, 55;
+  --gold-glow: rgba(212, 175, 55, 0.25);
+  --gold-border: rgba(212, 175, 55, 0.18);
+  
+  /* Text Colors - Modo Nocturno */
+  --text-primary: #FFFFFF;
+  --text-primary-rgb: 255, 255, 255;
+  --text-secondary: #B8B8B8;
+  --text-secondary-rgb: 184, 184, 184;
+  --text-muted: #7A7A7A;
+  --text-muted-rgb: 122, 122, 122;
+  
   --background: #0B0B0B;
   --foreground: #FFFFFF;
 }

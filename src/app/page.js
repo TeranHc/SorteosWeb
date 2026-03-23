@@ -108,12 +108,13 @@ export default function SorteosPage() {
 
   return (
     <div
+      data-theme={darkMode ? "dark" : "light"}
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0B0B0B",
-        color: "#FFFFFF",
+        backgroundColor: "var(--bg-main)",
+        color: "var(--text-primary)",
         fontFamily: "var(--font-body)",
-        transition: "background-color 0.3s ease",
+        transition: "background-color 0.3s ease, color 0.3s ease",
       }}
     >
       {/* ===== NAVBAR ===== */}
@@ -124,14 +125,14 @@ export default function SorteosPage() {
           left: 0,
           right: 0,
           zIndex: 1000,
-          backgroundColor: "rgba(11, 11, 11, 0.95)",
+          backgroundColor: `rgba(var(--bg-main-rgb), 0.95)`,
           backdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(212, 175, 55, 0.18)",
+          borderBottom: `1px solid var(--gold-border)`,
           padding: "16px 32px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)",
+          boxShadow: `0 4px 20px rgba(0, 0, 0, 0.5)`,
         }}
       >
         {/* Brand */}
@@ -143,7 +144,7 @@ export default function SorteosPage() {
               fontWeight: "900",
               letterSpacing: "3px",
               fontFamily: "var(--font-brand)",
-              background: "linear-gradient(135deg, #D4AF37 0%, #F0E68C 100%)",
+              background: `linear-gradient(135deg, var(--gold-accent) 0%, var(--text-secondary) 100%)`,
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -166,7 +167,7 @@ export default function SorteosPage() {
               key={item.name}
               href={item.link}
               style={{
-                color: "#B8B8B8",
+                color: "var(--text-secondary)",
                 textDecoration: "none",
                 fontSize: "13px",
                 fontWeight: "600",
@@ -177,10 +178,10 @@ export default function SorteosPage() {
                 position: "relative",
               }}
               onMouseEnter={(e) => {
-                e.target.style.color = "#D4AF37";
+                e.target.style.color = "var(--gold-accent)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.color = "#B8B8B8";
+                e.target.style.color = "var(--text-secondary)";
               }}
               className="hidden sm:inline-block"
             >
@@ -192,9 +193,9 @@ export default function SorteosPage() {
           <button
             onClick={toggleDarkMode}
             style={{
-              background: "rgba(212, 175, 55, 0.1)",
-              border: "1px solid rgba(212, 175, 55, 0.3)",
-              color: "#D4AF37",
+              background: `rgba(var(--gold-accent-rgb), 0.1)`,
+              border: `1px solid rgba(var(--gold-accent-rgb), 0.3)`,
+              color: "var(--gold-accent)",
               width: "44px",
               height: "44px",
               borderRadius: "12px",
@@ -208,11 +209,11 @@ export default function SorteosPage() {
             }}
             title={darkMode ? "Modo claro" : "Modo oscuro"}
             onMouseEnter={(e) => {
-              e.target.style.background = "rgba(212, 175, 55, 0.2)";
-              e.target.style.boxShadow = "0 0 15px rgba(212, 175, 55, 0.2)";
+              e.target.style.background = `rgba(var(--gold-accent-rgb), 0.2)`;
+              e.target.style.boxShadow = `0 0 15px rgba(var(--gold-accent-rgb), 0.2)`;
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = "rgba(212, 175, 55, 0.1)";
+              e.target.style.background = `rgba(var(--gold-accent-rgb), 0.1)`;
               e.target.style.boxShadow = "none";
             }}
           >
@@ -225,12 +226,14 @@ export default function SorteosPage() {
       <header
         id="inicio"
         style={{
-          background: "linear-gradient(135deg, #0B0B0B 0%, #1a1a2e 50%, #16213e 100%)",
+          background: darkMode
+            ? "linear-gradient(135deg, #0B0B0B 0%, #1a1a2e 50%, #16213e 100%)"
+            : "linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 50%, #F3F4F6 100%)",
           padding: "120px 32px 80px",
           position: "relative",
           overflow: "hidden",
           marginTop: "60px",
-          borderBottom: "2px solid rgba(212, 175, 55, 0.15)",
+          borderBottom: `2px solid rgba(var(--Gold-accent-rgb), 0.15)`,
         }}
       >
         {/* Background Glows */}
@@ -241,7 +244,9 @@ export default function SorteosPage() {
             left: "10%",
             width: "400px",
             height: "400px",
-            background: "radial-gradient(circle, rgba(193, 18, 31, 0.15) 0%, transparent 70%)",
+            background: darkMode
+              ? "radial-gradient(circle, rgba(193, 18, 31, 0.15) 0%, transparent 70%)"
+              : "radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%)",
             borderRadius: "50%",
             filter: "blur(80px)",
             zIndex: 0,
@@ -254,7 +259,7 @@ export default function SorteosPage() {
             right: "10%",
             width: "500px",
             height: "500px",
-            background: "radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%)",
+            background: `radial-gradient(circle, rgba(var(--gold-accent-rgb), ${darkMode ? "0.1" : "0.08"}) 0%, transparent 70%)`,
             borderRadius: "50%",
             filter: "blur(100px)",
             zIndex: 0,
@@ -268,7 +273,7 @@ export default function SorteosPage() {
               fontSize: "14px",
               fontFamily: "var(--font-ui)",
               letterSpacing: "4px",
-              color: "#D4AF37",
+              color: "var(--gold-accent)",
               marginBottom: "16px",
               textTransform: "uppercase",
               fontWeight: "700",
@@ -281,20 +286,20 @@ export default function SorteosPage() {
               fontSize: "clamp(48px, 8vw, 80px)",
               fontFamily: "var(--font-brand)",
               fontWeight: "900",
-              color: "#FFFFFF",
+              color: "var(--text-primary)",
               margin: "0 0 12px",
               lineHeight: 1,
               letterSpacing: "-2px",
               textTransform: "uppercase",
-              textShadow: "0 0 40px rgba(212, 175, 55, 0.2)",
+              textShadow: `0 0 40px rgba(var(--gold-accent-rgb), 0.2)`,
             }}
           >
             Sorteos
-            <div style={{ color: "#D4AF37", display: "block" }}>La Fortuna</div>
+            <div style={{ color: "var(--gold-accent)", display: "block" }}>La Fortuna</div>
           </h1>
           <p
             style={{
-              color: "#B8B8B8",
+              color: "var(--text-secondary)",
               fontSize: "18px",
               margin: "20px auto 0",
               maxWidth: "520px",
@@ -1175,7 +1180,7 @@ export default function SorteosPage() {
             {/* Instructions */}
             <p
               style={{
-                color: "#7A7A7A",
+                color: "var(--text-muted)",
                 fontSize: "12px",
                 marginBottom: "28px",
                 fontFamily: "var(--font-body)",
