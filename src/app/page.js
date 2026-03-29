@@ -449,7 +449,7 @@ export default function SorteosPage() {
                         fontSize: "18px",
                         fontFamily: "var(--font-ui)",
                         fontWeight: "800",
-                        color: "#FFFFFF",
+                        color: "var(--text-primary)",
                       }}
                     >
                       {prize.name}
@@ -458,7 +458,7 @@ export default function SorteosPage() {
                       style={{
                         margin: "0 0 16px",
                         fontSize: "12px",
-                        color: "#B8B8B8",
+                        color: "var(--text-secondary)",
                         lineHeight: 1.5,
                         fontFamily: "var(--font-body)",
                       }}
@@ -559,7 +559,7 @@ export default function SorteosPage() {
                     fontSize: "28px",
                     fontFamily: "var(--font-brand)",
                     fontWeight: "900",
-                    color: "#FFFFFF",
+                    color: "var(--text-primary)",
                   }}
                 >
                   {activePrize.name}
@@ -569,7 +569,7 @@ export default function SorteosPage() {
                 style={{
                   margin: "8px 0 0",
                   fontSize: "13px",
-                  color: "#B8B8B8",
+                  color: "var(--text-secondary)",
                   fontFamily: "var(--font-ui)",
                   fontWeight: "500",
                 }}
@@ -606,7 +606,7 @@ export default function SorteosPage() {
                       boxShadow: `0 0 12px ${l.color}40`,
                     }}
                   />
-                  <span style={{ fontSize: "12px", color: "#B8B8B8", fontFamily: "var(--font-ui)" }}>
+                  <span style={{ fontSize: "12px", color: "var(--text-secondary)", fontFamily: "var(--font-ui)" }}>
                     {l.label}
                   </span>
                 </div>
@@ -733,7 +733,7 @@ export default function SorteosPage() {
                   background: userPicks[activePrize.id]?.size
                     ? `linear-gradient(135deg, ${activePrize.color} 0%, ${activePrize.color}dd 100%)`
                     : "rgba(122, 122, 122, 0.3)",
-                  color: "#FFFFFF",
+                  color: "var(--text-primary)",
                   border: "none",
                   borderRadius: "12px",
                   padding: "14px 32px",
@@ -773,7 +773,7 @@ export default function SorteosPage() {
             style={{
               textAlign: "center",
               padding: "80px 20px",
-              color: "#7A7A7A",
+              color: "var(--text-muted)",
               marginBottom: "60px",
             }}
           >
@@ -894,7 +894,7 @@ export default function SorteosPage() {
                     fontSize: "20px",
                     fontFamily: "var(--font-ui)",
                     fontWeight: "900",
-                    color: "#FFFFFF",
+                    color: "var(--text-primary)",
                   }}
                 >
                   {winner.name}
@@ -903,7 +903,7 @@ export default function SorteosPage() {
                   style={{
                     margin: "0 0 16px",
                     fontSize: "13px",
-                    color: "#D4AF37",
+                    color: "var(--gold-accent)",
                     fontFamily: "var(--font-ui)",
                     fontWeight: "700",
                   }}
@@ -925,7 +925,7 @@ export default function SorteosPage() {
                     style={{
                       margin: 0,
                       fontSize: "11px",
-                      color: "#B8B8B8",
+                      color: "var(--text-secondary)",
                       fontFamily: "var(--font-ui)",
                       fontWeight: "600",
                       textTransform: "uppercase",
@@ -982,7 +982,7 @@ export default function SorteosPage() {
           </div>
           <p
             style={{
-              color: "#B8B8B8",
+              color: "var(--text-secondary)",
               maxWidth: "600px",
               margin: "16px auto 32px",
               lineHeight: 1.7,
@@ -1119,7 +1119,7 @@ export default function SorteosPage() {
                 fontSize: "28px",
                 fontFamily: "var(--font-brand)",
                 fontWeight: "900",
-                color: "#FFFFFF",
+                color: "var(--text-primary)",
                 letterSpacing: "-0.5px",
               }}
             >
@@ -1129,7 +1129,7 @@ export default function SorteosPage() {
             {/* Reservation Details */}
             <p
               style={{
-                color: "#B8B8B8",
+                color: "var(--text-secondary)",
                 marginBottom: "24px",
                 fontSize: "14px",
                 fontFamily: "var(--font-body)",
