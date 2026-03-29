@@ -107,179 +107,21 @@ export default function SorteosPage() {
   };
 
   return (
-    <div
-      data-theme={darkMode ? "dark" : "light"}
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "var(--bg-main)",
-        color: "var(--text-primary)",
-        fontFamily: "var(--font-body)",
-        transition: "background-color 0.3s ease, color 0.3s ease",
-      }}
-    >
-      {/* ===== NAVBAR ===== */}
-      <nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          backgroundColor: `rgba(var(--bg-main-rgb), 0.95)`,
-          backdropFilter: "blur(12px)",
-          borderBottom: `1px solid var(--gold-border)`,
-          padding: "16px 32px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          boxShadow: `0 4px 20px rgba(0, 0, 0, 0.5)`,
-        }}
-      >
-        {/* Brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div style={{ fontSize: "24px" }}>💎</div>
-          <div
-            style={{
-              fontSize: "18px",
-              fontWeight: "900",
-              letterSpacing: "3px",
-              fontFamily: "var(--font-brand)",
-              background: `linear-gradient(135deg, var(--gold-accent) 0%, var(--text-secondary) 100%)`,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              textTransform: "uppercase",
-            }}
-          >
-            La Fortuna
-          </div>
-        </div>
-
-        {/* Nav Links */}
-        <div style={{ display: "flex", gap: "32px", alignItems: "center" }}>
-          {[
-            { name: "Inicio", link: "#inicio" },
-            { name: "Sorteos", link: "#sorteos" },
-            { name: "Ganadores", link: "#ganadores" },
-            { name: "Contacto", link: "#contacto" },
-          ].map((item) => (
-            <a
-              key={item.name}
-              href={item.link}
-              style={{
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                fontSize: "13px",
-                fontWeight: "600",
-                fontFamily: "var(--font-ui)",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                transition: "all 0.3s ease",
-                position: "relative",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.color = "var(--gold-accent)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = "var(--text-secondary)";
-              }}
-              className="hidden sm:inline-block"
-            >
-              {item.name}
-            </a>
-          ))}
-
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={toggleDarkMode}
-            style={{
-              background: `rgba(var(--gold-accent-rgb), 0.1)`,
-              border: `1px solid rgba(var(--gold-accent-rgb), 0.3)`,
-              color: "var(--gold-accent)",
-              width: "44px",
-              height: "44px",
-              borderRadius: "12px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "18px",
-              transition: "all 0.3s ease",
-              fontFamily: "var(--font-ui)",
-            }}
-            title={darkMode ? "Modo claro" : "Modo oscuro"}
-            onMouseEnter={(e) => {
-              e.target.style.background = `rgba(var(--gold-accent-rgb), 0.2)`;
-              e.target.style.boxShadow = `0 0 15px rgba(var(--gold-accent-rgb), 0.2)`;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = `rgba(var(--gold-accent-rgb), 0.1)`;
-              e.target.style.boxShadow = "none";
-            }}
-          >
-            {darkMode ? "☀️" : "🌙"}
-          </button>
-        </div>
-      </nav>
-
-      {/* ===== HERO HEADER ===== */}
-      <header
-        id="inicio"
-        style={{
-          background: darkMode
-            ? "linear-gradient(135deg, #0B0B0B 0%, #1a1a2e 50%, #16213e 100%)"
-            : "linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 50%, #F3F4F6 100%)",
-          padding: "120px 32px 80px",
-          position: "relative",
-          overflow: "hidden",
-          marginTop: "60px",
-          borderBottom: `2px solid rgba(var(--Gold-accent-rgb), 0.15)`,
-        }}
-      >
-        {/* Background Glows */}
-        <div
-          style={{
-            position: "absolute",
-            top: "10%",
-            left: "10%",
-            width: "400px",
-            height: "400px",
-            background: darkMode
-              ? "radial-gradient(circle, rgba(193, 18, 31, 0.15) 0%, transparent 70%)"
-              : "radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%)",
-            borderRadius: "50%",
-            filter: "blur(80px)",
-            zIndex: 0,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: "10%",
-            right: "10%",
-            width: "500px",
-            height: "500px",
-            background: `radial-gradient(circle, rgba(var(--gold-accent-rgb), ${darkMode ? "0.1" : "0.08"}) 0%, transparent 70%)`,
-            borderRadius: "50%",
-            filter: "blur(100px)",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Content */}
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
-          <div
-            style={{
-              fontSize: "14px",
-              fontFamily: "var(--font-ui)",
-              letterSpacing: "4px",
-              color: "var(--gold-accent)",
-              marginBottom: "16px",
-              textTransform: "uppercase",
-              fontWeight: "700",
-            }}
-          >
-            🏆 Bienvenido a la Experiencia Premium 🏆
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", minHeight: "100vh", backgroundColor: "#FFFBF5" }}>
+      {/* HEADER */}
+      <header style={{
+        background: "linear-gradient(135deg, #143768 0%, #000000 50%, #143768 100%)",
+        padding: "0",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%)",
+        }} />
+        <div style={{ position: "relative", textAlign: "center", padding: "52px 24px 44px" }}>
+          <div style={{ fontSize: "14px", fontFamily: "monospace", letterSpacing: "6px", color: "rgba(255,255,255,0.85)", marginBottom: "12px", textTransform: "uppercase" }}>
+            🏆 Bienvenido a 🏆
           </div>
           <h1
             style={{
@@ -295,7 +137,8 @@ export default function SorteosPage() {
             }}
           >
             Sorteos
-            <div style={{ color: "var(--gold-accent)", display: "block" }}>La Fortuna</div>
+            
+            <span style={{ display: "block", color: "#FFF3D0" }}>La Fortuna</span>
           </h1>
           <p
             style={{
@@ -333,47 +176,14 @@ export default function SorteosPage() {
         </div>
       </header>
 
-      {/* ===== MAIN CONTENT ===== */}
-      <main style={{ maxWidth: "1000px", margin: "0 auto", padding: "60px 20px 100px" }}>
-        {/* PRIZE CARDS SECTION */}
-        <section id="sorteos" style={{ scrollMarginTop: "100px", marginBottom: "80px" }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <div
-              style={{
-                fontSize: "12px",
-                fontFamily: "var(--font-ui)",
-                letterSpacing: "3px",
-                color: "#7A7A7A",
-                textTransform: "uppercase",
-                marginBottom: "12px",
-                fontWeight: "700",
-              }}
-            >
-              ✨ Sorteos Disponibles ✨
-            </div>
-            <h2
-              style={{
-                fontSize: "32px",
-                fontFamily: "var(--font-brand)",
-                fontWeight: "900",
-                color: "#FFFFFF",
-                margin: 0,
-                letterSpacing: "-1px",
-              }}
-            >
-              Elige Tu Suerte
-            </h2>
-          </div>
+      <main style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 20px 80px" }}>
 
-          {/* Prize Grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-              gap: "24px",
-              marginBottom: "60px",
-            }}
-          >
+        {/* PRIZE CARDS */}
+        <section>
+          <h2 style={{ textAlign: "center", fontSize: "13px", letterSpacing: "5px", color: "#999", textTransform: "uppercase", marginBottom: "28px", fontFamily: "monospace" }}>
+            — Sorteos Disponibles —
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: "16px", marginBottom: "48px" }}>
             {PRIZES.map((prize) => {
               const taken = takenMap[prize.id]?.size || 0;
               const free = prize.total - taken;
@@ -790,305 +600,15 @@ export default function SorteosPage() {
             </p>
           </div>
         )}
-
-        {/* WINNERS SECTION */}
-        <section id="ganadores" style={{ scrollMarginTop: "100px", marginBottom: "80px" }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <div
-              style={{
-                fontSize: "12px",
-                fontFamily: "var(--font-ui)",
-                letterSpacing: "3px",
-                color: "#7A7A7A",
-                textTransform: "uppercase",
-                marginBottom: "12px",
-                fontWeight: "700",
-              }}
-            >
-              🏆 Celebrando a Nuestros Ganadores 🏆
-            </div>
-            <h2
-              style={{
-                fontSize: "32px",
-                fontFamily: "var(--font-brand)",
-                fontWeight: "900",
-                color: "#FFFFFF",
-                margin: 0,
-                letterSpacing: "-1px",
-              }}
-            >
-              Últimas Fortunas
-            </h2>
-          </div>
-
-          {/* Winners Grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "28px",
-            }}
-          >
-            {[
-              { name: "Carlos M.", prize: "Viaje Galápagos", date: "12 Mar", ticket: "42" },
-              { name: "Elena R.", prize: "Canasta Familiar", date: "10 Mar", ticket: "15" },
-              { name: "Andrés B.", prize: "Spa & Bienestar", date: "05 Mar", ticket: "08" },
-            ].map((winner, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(30, 30, 30, 0.7) 100%)",
-                  border: "1px solid rgba(212, 175, 55, 0.2)",
-                  borderRadius: "16px",
-                  padding: "32px 24px",
-                  textAlign: "center",
-                  position: "relative",
-                  overflow: "hidden",
-                  backdropFilter: "blur(8px)",
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.5)";
-                  e.currentTarget.style.boxShadow =
-                    "0 0 30px rgba(212, 175, 55, 0.2), 0 12px 36px rgba(0, 0, 0, 0.4)";
-                  e.currentTarget.style.transform = "translateY(-6px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.2)";
-                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.3)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                {/* Ticket Badge */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "-8px",
-                    right: "12px",
-                    background: "linear-gradient(135deg, #D4AF37 0%, #F0E68C 100%)",
-                    color: "#0B0B0B",
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "var(--font-numbers)",
-                    fontWeight: "900",
-                    fontSize: "18px",
-                    boxShadow: "0 0 25px rgba(212, 175, 55, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3)",
-                    border: "2px solid #0B0B0B",
-                  }}
-                >
-                  #{winner.ticket}
-                </div>
-
-                {/* Trophy Icon */}
-                <div style={{ fontSize: "48px", marginBottom: "12px" }}>🏆</div>
-
-                {/* Winner Info */}
-                <h3
-                  style={{
-                    margin: "0 0 4px",
-                    fontSize: "20px",
-                    fontFamily: "var(--font-ui)",
-                    fontWeight: "900",
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  {winner.name}
-                </h3>
-                <p
-                  style={{
-                    margin: "0 0 16px",
-                    fontSize: "13px",
-                    color: "var(--gold-accent)",
-                    fontFamily: "var(--font-ui)",
-                    fontWeight: "700",
-                  }}
-                >
-                  {winner.prize}
-                </p>
-
-                {/* Date */}
-                <div
-                  style={{
-                    background: "rgba(212, 175, 55, 0.1)",
-                    border: "1px solid rgba(212, 175, 55, 0.2)",
-                    borderRadius: "8px",
-                    padding: "8px 12px",
-                    display: "inline-block",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "11px",
-                      color: "var(--text-secondary)",
-                      fontFamily: "var(--font-ui)",
-                      fontWeight: "600",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    📅 {winner.date}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CONTACT SECTION */}
-        <section
-          id="contacto"
-          style={{
-            background: `linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(26, 26, 26, 0.8) 100%)`,
-            border: "1px solid rgba(212, 175, 55, 0.2)",
-            borderRadius: "20px",
-            padding: "56px 40px",
-            textAlign: "center",
-            backdropFilter: "blur(10px)",
-            boxShadow: "0 0 40px rgba(212, 175, 55, 0.1), 0 16px 32px rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          <div style={{ marginBottom: "24px" }}>
-            <div
-              style={{
-                fontSize: "12px",
-                fontFamily: "var(--font-ui)",
-                letterSpacing: "3px",
-                color: "#7A7A7A",
-                textTransform: "uppercase",
-                marginBottom: "12px",
-                fontWeight: "700",
-              }}
-            >
-              💬 ¿PREGUNTAS O CONSULTAS? 💬
-            </div>
-            <h2
-              style={{
-                fontSize: "32px",
-                fontFamily: "var(--font-brand)",
-                fontWeight: "900",
-                color: "#FFFFFF",
-                margin: 0,
-                letterSpacing: "-1px",
-              }}
-            >
-              Estamos Aquí Para Ayudarte
-            </h2>
-          </div>
-          <p
-            style={{
-              color: "var(--text-secondary)",
-              maxWidth: "600px",
-              margin: "16px auto 32px",
-              lineHeight: 1.7,
-              fontSize: "14px",
-              fontFamily: "var(--font-body)",
-            }}
-          >
-            Contáctanos directamente vía WhatsApp o correo. Nuestro equipo premium está listo para confirmar tus
-            reservas y ayudarte con los métodos de pago.
-          </p>
-
-          {/* CTA Buttons */}
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a
-              href="https://wa.me/593999999999"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                background: "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)",
-                color: "#FFFFFF",
-                padding: "14px 32px",
-                borderRadius: "12px",
-                textDecoration: "none",
-                fontFamily: "var(--font-ui)",
-                fontWeight: "800",
-                fontSize: "14px",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                boxShadow: "0 0 25px rgba(34, 197, 94, 0.4), 0 8px 20px rgba(0, 0, 0, 0.3)",
-                transition: "all 0.3s ease",
-                border: "none",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 35px rgba(34, 197, 94, 0.6), 0 12px 30px rgba(0, 0, 0, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 25px rgba(34, 197, 94, 0.4), 0 8px 20px rgba(0, 0, 0, 0.3)";
-              }}
-            >
-              <svg
-                style={{ width: "20px", height: "20px", fill: "currentColor" }}
-                viewBox="0 0 24 24"
-              >
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z" />
-              </svg>
-              WhatsApp
-            </a>
-            <a
-              href="mailto:info@sorteoslafortuna.com"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                background: "linear-gradient(135deg, #D4AF37 0%, #F0E68C 100%)",
-                color: "#0B0B0B",
-                padding: "14px 32px",
-                borderRadius: "12px",
-                textDecoration: "none",
-                fontFamily: "var(--font-ui)",
-                fontWeight: "800",
-                fontSize: "14px",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                boxShadow: "0 0 25px rgba(212, 175, 55, 0.4), 0 8px 20px rgba(0, 0, 0, 0.3)",
-                transition: "all 0.3s ease",
-                border: "none",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 35px rgba(212, 175, 55, 0.6), 0 12px 30px rgba(0, 0, 0, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 25px rgba(212, 175, 55, 0.4), 0 8px 20px rgba(0, 0, 0, 0.3)";
-              }}
-            >
-              ✉️ CORREO
-            </a>
-          </div>
-        </section>
       </main>
 
       {/* ===== MODAL SUCCESS ===== */}
       {modal && (
         <div
           style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0, 0, 0, 0.7)",
-            backdropFilter: "blur(4px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-            padding: "20px",
+            position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            zIndex: 999, padding: "20px",
           }}
           onClick={() => setModal(null)}
         >
@@ -1176,46 +696,20 @@ export default function SorteosPage() {
                 {modal.nums.sort((a, b) => a - b).join(" · ")}
               </p>
             </div>
-
-            {/* Instructions */}
-            <p
-              style={{
-                color: "var(--text-muted)",
-                fontSize: "12px",
-                marginBottom: "28px",
-                fontFamily: "var(--font-body)",
-                fontStyle: "italic",
-              }}
-            >
-              Guarda una captura de pantalla como comprobante y contáctanos para procesar el pago 📸
+            <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "24px" }}>
+              Guarda una captura de pantalla como comprobante 📸
             </p>
 
             {/* Close Button */}
             <button
               onClick={() => setModal(null)}
               style={{
-                background: `linear-gradient(135deg, ${modal.prize.color} 0%, ${modal.prize.color}dd 100%)`,
-                color: "#FFFFFF",
-                border: "none",
-                borderRadius: "12px",
-                padding: "14px 48px",
-                fontSize: "14px",
-                fontFamily: "var(--font-ui)",
-                fontWeight: "800",
-                textTransform: "uppercase",
-                letterSpacing: "1.5px",
-                cursor: "pointer",
-                boxShadow: `0 0 25px ${modal.prize.color}60, 0 8px 20px rgba(0, 0, 0, 0.3)`,
-                transition: "all 0.3s ease",
+                background: modal.prize.color, color: "#fff", border: "none",
+                borderRadius: "14px", padding: "14px 40px",
+                fontSize: "16px", fontWeight: "800", cursor: "pointer",
+                boxShadow: `0 6px 20px ${modal.prize.color}50`,
               }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = `0 0 35px ${modal.prize.color}80, 0 12px 30px rgba(0, 0, 0, 0.4)`;
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = `0 0 25px ${modal.prize.color}60, 0 8px 20px rgba(0, 0, 0, 0.3)`;
-              }}
+              className="hover:scale-105"
             >
               ¡Entendido!
             </button>
@@ -1223,34 +717,27 @@ export default function SorteosPage() {
         </div>
       )}
 
-      {/* ===== FOOTER ===== */}
-      <footer
-        style={{
-          background: "linear-gradient(135deg, #0B0B0B 0%, #161616 100%)",
-          color: "#B8B8B8",
-          padding: "80px 32px 40px",
-          borderTop: "2px solid rgba(212, 175, 55, 0.15)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Decorative Wave */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-2px",
-            left: 0,
-            width: "100%",
-            height: "60px",
-            overflow: "hidden",
-          }}
-        >
-          <svg
-            viewBox="0 0 1200 60"
-            preserveAspectRatio="none"
-            style={{ width: "100%", height: "100%", display: "block" }}
-          >
-            <path d="M0,30 Q300,10 600,30 T1200,30 L1200,0 L0,0 Z" fill="#161616" />
+      <style>{`
+        @keyframes popIn {
+          from { opacity: 0; transform: scale(0.7); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        * { box-sizing: border-box; }
+        button:hover:not(:disabled) { filter: brightness(0.95); }
+      `}</style>
+      {/* FOOTER */}
+      <footer style={{ 
+        background: "#1a1a1a", 
+        color: "#fff", 
+        padding: "60px 20px 30px", 
+        marginTop: "40px",
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        {/* Adorno superior (onda invertida) */}
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "40px", overflow: "hidden", transform: "rotate(180deg)" }}>
+          <svg viewBox="0 0 1200 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
+            <path d="M0,40 C300,0 600,40 900,10 C1050,0 1150,20 1200,40 Z" fill="#FFFBF5" />
           </svg>
         </div>
 
@@ -1266,84 +753,21 @@ export default function SorteosPage() {
           >
             {/* Column 1: Brand */}
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-                <div style={{ fontSize: "24px" }}>💎</div>
-                <h3
-                  style={{
-                    margin: 0,
-                    fontSize: "18px",
-                    fontFamily: "var(--font-brand)",
-                    fontWeight: "900",
-                    background: "linear-gradient(135deg, #D4AF37 0%, #F0E68C 100%)",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    letterSpacing: "1px",
-                  }}
-                >
-                  LA FORTUNA
-                </h3>
-              </div>
-              <p
-                style={{
-                  color: "#7A7A7A",
-                  fontSize: "13px",
-                  lineHeight: 1.6,
-                  margin: "0 0 24px",
-                  fontFamily: "var(--font-body)",
-                }}
-              >
-                Plataforma premium de sorteos y rifas. Llevando suerte y premios extraordinarios a toda la región
-                desde Guayaquil.
+              <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#FF6B35", margin: "0 0 16px" }}>
+                Sorteos La Fortuna
+              </h3>
+              <p style={{ color: "#aaa", fontSize: "14px", lineHeight: "1.6" }}>
+                Llevando alegría y premios increíbles a todos nuestros participantes desde Guayaquil para todo el país.
               </p>
-
-              {/* Social Icons */}
-              <div style={{ display: "flex", gap: "12px" }}>
-                {[
-                  {
-                    icon: "f",
-                    href: "#",
-                    color: "#1877F2",
-                  },
-                  {
-                    icon: "📷",
-                    href: "#",
-                    color: "#E4405F",
-                  },
-                  {
-                    icon: "𝕏",
-                    href: "#",
-                    color: "#000000",
-                  },
-                ].map((social, i) => (
-                  <a
-                    key={i}
-                    href={social.href}
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "8px",
-                      background: `rgba(212, 175, 55, 0.1)`,
-                      border: "1px solid rgba(212, 175, 55, 0.2)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#D4AF37",
-                      textDecoration: "none",
-                      fontSize: "16px",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "rgba(212, 175, 55, 0.2)";
-                      e.currentTarget.style.boxShadow = "0 0 15px rgba(212, 175, 55, 0.2)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "rgba(212, 175, 55, 0.1)";
-                      e.currentTarget.style.boxShadow = "none";
-                    }}
-                  >
-                    {social.icon}
-                  </a>
+              <div style={{ display: "flex", gap: "12px", marginTop: "20px" }}>
+                {['Facebook', 'Instagram', 'WhatsApp'].map(social => (
+                  <div key={social} style={{ 
+                    width: "36px", height: "36px", borderRadius: "50%", 
+                    background: "#333", display: "flex", alignItems: "center", 
+                    justifyContent: "center", cursor: "pointer", transition: "0.3s" 
+                  }}>
+                    <span style={{ fontSize: "14px" }}>{social[0]}</span>
+                  </div>
                 ))}
               </div>
             </div>
@@ -1399,42 +823,10 @@ export default function SorteosPage() {
               >
                 Información
               </h4>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                }}
-              >
-                {[
-                  "Términos y Condiciones",
-                  "Preguntas Frecuentes",
-                  "Aviso de Privacidad",
-                ].map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      style={{
-                        color: "#7A7A7A",
-                        textDecoration: "none",
-                        fontSize: "12px",
-                        fontFamily: "var(--font-body)",
-                        transition: "color 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#D4AF37";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "#7A7A7A";
-                      }}
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "14px", color: "#aaa", lineHeight: "2" }}>
+                <li style={{ cursor: "pointer" }}>Términos y Condiciones</li>
+                <li style={{ cursor: "pointer" }}>Preguntas Frecuentes</li>
+                <li style={{ cursor: "pointer" }}>Contacto directo</li>
               </ul>
             </div>
           </div>
@@ -1471,75 +863,6 @@ export default function SorteosPage() {
           </div>
         </div>
       </footer>
-
-      {/* ===== GLOBAL STYLES ===== */}
-      <style>{`
-        html {
-          scroll-behavior: smooth;
-        }
-
-        @keyframes modalPop {
-          from {
-            opacity: 0;
-            transform: scale(0.8) translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-
-        button:not(:disabled) {
-          cursor: pointer;
-        }
-
-        button:disabled {
-          opacity: 0.5;
-        }
-
-        #sorteos,
-        #ganadores,
-        #contacto {
-          scroll-margin-top: 100px;
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-          width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: #161616;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #D4AF37 0%, #C1121F 100%);
-          border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #F0E68C 0%, #E63946 100%);
-        }
-
-        /* Selection */
-        ::selection {
-          background: rgba(212, 175, 55, 0.3);
-          color: #FFFFFF;
-        }
-      `}</style>
     </div>
   );
 }
