@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /* ══════════════════════════════════════
    PRIZE DATA  (keep & extend freely)
@@ -131,10 +131,13 @@ export default function SorteosPage() {
   const [showPayment, setShowPayment] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [tempReservation, setTempReservation] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [takenMap, setTakenMap] = useState(initialTaken);
   const [userPicks, setUserPicks] = useState({});
   const [modal, setModal] = useState(null);
   const [theme, setTheme] = useState("night"); // "night" | "classic"
+  const selectionSectionRef = useRef(null);
+
 
   /* ── Theme persistence ── */
   useEffect(() => {
@@ -164,12 +167,22 @@ export default function SorteosPage() {
     });
   };
 
-/* ── Efecto de Sonido Casino ── */
+  /* ── Efecto de Sonido Casino ── */
   const playWinSound = () => {
     const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"); // Sonido de ganancia/monedas
     audio.volume = 0.4;
     audio.play().catch(err => console.log("Audio play blocked by browser"));
   };
+
+  // Efecto para scroll automático al seleccionar un premio
+  useEffect(() => {
+    if (selected && selectionSectionRef.current) {
+      selectionSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  }, [selected]); // Se dispara cada vez que cambia el premio seleccionado
 
   // --- WHATSAPP URL ---
   const getWhatsAppUrl = (prizeName, nums) => {
@@ -294,8 +307,13 @@ export default function SorteosPage() {
         }} />
 
         <div style={{
-          position: "relative", zIndex: 1,
-          padding: "2rem 5%", width: "100%", maxWidth: "900px", margin: "0 auto",
+          position: "relative",
+          zIndex: 1, // Capa base del contenido del Hero
+          padding: "2rem 5%",
+          width: "100%",
+          maxWidth: "900px",
+          margin: "0 auto",
+          // Asegúrate de que NO haya overflow: hidden aquí
         }}>
 
           {/* Eyebrow badge */}
@@ -371,80 +389,159 @@ export default function SorteosPage() {
             >
               ✦ Ver Sorteos
             </button>
-            <button
-              style={{
-                border: "1px solid var(--border-accent)",
-                color: "var(--accent-gold)",
-                background: "transparent",
-                padding: "0.75rem 1.8rem",
-                fontSize: "0.8rem",
-                textTransform: "uppercase", letterSpacing: "0.1em",
-                borderRadius: "var(--r-sm)", cursor: "pointer", transition: "all 0.3s",
-                fontFamily: "var(--font-body)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--accent-gold)";
-                e.currentTarget.style.color = "var(--text-inverse)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--accent-gold)";
-              }}
+            {/* Contenedor relativo para el botón y el tooltip */}
+            <div
+              style={{ position: "relative", display: "inline-block" }}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
             >
-              Cómo Funciona
-            </button>
+              <button
+                style={{
+                  border: "1px solid var(--border-accent)",
+                  color: "var(--accent-gold)",
+                  background: "transparent",
+                  padding: "0.75rem 1.8rem",
+                  fontSize: "0.8rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  borderRadius: "var(--r-sm)",
+                  cursor: "pointer",
+                  transition: "all 0.3s",
+                  fontFamily: "var(--font-body)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--accent-gold)";
+                  e.currentTarget.style.color = "var(--text-inverse)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--accent-gold)";
+                }}
+              >
+                Cómo Funciona
+              </button>
+              {/* --- TOOLTIP CORREGIDO --- */}
+              {showTooltip && (
+                <div style={{
+                  position: "absolute",
+                  bottom: "calc(100% + 25px)", // Un poco más de aire
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "320px",
+                  background: "var(--bg-elevated)", // USA EL COLOR DEL TEMA (OPACO)
+                  border: "1px solid var(--accent-gold)",
+                  borderRadius: "var(--r-lg)",
+                  padding: "1.5rem",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.9)", // Sombra pesada para dar profundidad
+                  zIndex: 9999, // VALOR EXTREMO para garantizar visibilidad por encima del Hero
+                  textAlign: "left",
+                  animation: "fadeUp 0.3s ease both",
+                  pointerEvents: "none",
+                }}>
+                  {/* Triángulo indicador apuntando hacia abajo */}
+                  <div style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: 0, height: 0,
+                    borderLeft: "10px solid transparent",
+                    borderRight: "10px solid transparent",
+                    borderTop: "10px solid var(--accent-gold)",
+                  }} />
+
+                  <h4 style={{
+                    fontFamily: "var(--font-brand)",
+                    color: "var(--accent-gold)",
+                    fontSize: "0.9rem",
+                    marginTop: 0,
+                    marginBottom: "1rem",
+                    borderBottom: "1px solid var(--border-subtle)",
+                    paddingBottom: "0.5rem"
+                  }}>
+                    Pasos para Participar
+                  </h4>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {[
+                      { step: "1", title: "Elige tu Premio", desc: "Selecciona un sorteo 'Activo' en la cartelera." },
+                      { step: "2", title: "Escoge tus Números", desc: "Usa la grilla para marcar tus números de la suerte." },
+                      { step: "3", title: "Paga y Confirma", desc: "Paga por transferencia o tarjeta y sube tu comprobante." }
+                    ].map(item => (
+                      <div key={item.step} style={{ display: "flex", gap: "0.85rem", alignItems: "start" }}>
+                        <div style={{
+                          width: "22px", height: "22px",
+                          background: "var(--accent-gold)",
+                          color: "var(--text-inverse)",
+                          borderRadius: "50%",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontWeight: 900, fontSize: "0.75rem",
+                          flexShrink: 0
+                        }}>
+                          {item.step}
+                        </div>
+                        <div>
+                          <div style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "0.85rem" }}>{item.title}</div>
+                          <div style={{ color: "var(--text-muted)", fontSize: "0.75rem", lineHeight: 1.4 }}>{item.desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Stats row */}
+            <div style={{
+              display: "flex",
+              border: "1px solid var(--border-mid)",
+              borderRadius: "var(--r-md)",
+              overflow: "hidden",
+              background: "var(--bg-surface)",
+              maxWidth: "560px", margin: "0 auto",
+              animation: "fadeUp 0.7s 0.25s ease both",
+            }}>
+              {[
+                { num: `${PRIZES.length}`, label: "Sorteos Activos" },
+                { num: `${PRIZES.reduce((s, p) => s + p.total, 0)}`, label: "Números Totales" },
+                { num: "$1", label: "Desde" },
+              ].map((stat, i) => (
+                <div key={i} style={{
+                  flex: 1, padding: "1.2rem 1rem", textAlign: "center",
+                  borderRight: i < 2 ? "1px solid var(--border-subtle)" : "none",
+                }}>
+                  <span style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: "1.8rem", fontWeight: 700,
+                    color: "var(--accent-gold)", display: "block",
+                  }}>
+                    {stat.num}
+                  </span>
+                  <span style={{
+                    fontSize: "0.68rem", textTransform: "uppercase",
+                    letterSpacing: "0.14em", color: "var(--text-muted)",
+                  }}>
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Stats row */}
+          {/* Scroll indicator */}
           <div style={{
-            display: "flex",
-            border: "1px solid var(--border-mid)",
-            borderRadius: "var(--r-md)",
-            overflow: "hidden",
-            background: "var(--bg-surface)",
-            maxWidth: "560px", margin: "0 auto",
-            animation: "fadeUp 0.7s 0.25s ease both",
+            position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)",
+            color: "var(--text-muted)", fontSize: "1.5rem",
+            animation: "blink 2s ease infinite",
           }}>
-            {[
-              { num: `${PRIZES.length}`, label: "Sorteos Activos" },
-              { num: `${PRIZES.reduce((s, p) => s + p.total, 0)}`, label: "Números Totales" },
-              { num: "$1", label: "Desde" },
-            ].map((stat, i) => (
-              <div key={i} style={{
-                flex: 1, padding: "1.2rem 1rem", textAlign: "center",
-                borderRight: i < 2 ? "1px solid var(--border-subtle)" : "none",
-              }}>
-                <span style={{
-                  fontFamily: "'Cinzel', serif",
-                  fontSize: "1.8rem", fontWeight: 700,
-                  color: "var(--accent-gold)", display: "block",
-                }}>
-                  {stat.num}
-                </span>
-                <span style={{
-                  fontSize: "0.68rem", textTransform: "uppercase",
-                  letterSpacing: "0.14em", color: "var(--text-muted)",
-                }}>
-                  {stat.label}
-                </span>
-              </div>
-            ))}
+            ⌄
           </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div style={{
-          position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)",
-          color: "var(--text-muted)", fontSize: "1.5rem",
-          animation: "blink 2s ease infinite",
-        }}>
-          ⌄
         </div>
       </header>
 
-{/* ══════════ MAIN ══════════ */}
+      {/* ══════════ MAIN ══════════ */}
       <main id="sorteos-section" style={{ maxWidth: "960px", margin: "0 auto", padding: "5rem 5% 80px" }}>
-        
+
         {/* --- ENCABEZADO Y PESTAÑAS --- */}
         <section>
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -498,7 +595,7 @@ export default function SorteosPage() {
                 const taken = takenMap[prize.id]?.size || 0;
                 const free = prize.total - taken;
                 const pct = (taken / prize.total) * 100;
-                
+
                 // Cálculo de tiempo restante (Helper)
                 const timeLeft = !isFinished && !isUpcoming ? calculateTimeLeft(prize.fechaSorteo, prize.horaSorteo) : null;
 
@@ -597,7 +694,7 @@ export default function SorteosPage() {
 
                     {/* Botón de Acción */}
                     {activeTab === 'active' && (
-                      <button 
+                      <button
                         onClick={() => setSelected(isActive ? null : prize.id)}
                         style={{
                           width: "100%", marginTop: "1rem", padding: "0.8rem",
@@ -622,495 +719,507 @@ export default function SorteosPage() {
           </div>
         </section>
 
-        {/* --- PANEL DE SELECCIÓN DE NÚMEROS --- */}
-        {activePrize && activeTab === 'active' && (
-          <section style={{
-            background: "var(--bg-surface)",
-            border: "1px solid var(--border-mid)",
-            borderRadius: "var(--r-xl)",
-            padding: "3rem 2rem",
-            marginTop: "2rem",
-            marginBottom: "5rem",
-            boxShadow: "var(--card-shadow)",
-            animation: "fadeUp 0.5s ease"
-          }}>
-            <div style={{ marginBottom: "2rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-                <span style={{ fontSize: "1.8rem" }}>{activePrize.emoji}</span>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.8rem", fontWeight: 700, margin: 0, color: "var(--text-primary)" }}>
-                  {activePrize.name}
-                </h2>
-              </div>
-              <div className="deco-line">
-                <div className="deco-diamond"></div>
-              </div>
-              <p style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>
-                Selecciona tus números de la suerte para este sorteo
-              </p>
-            </div>
-
-            {/* Grid de Números */}
+          {/* --- PANEL DE SELECCIÓN DE NÚMEROS CENTRADO --- */}
+          {activePrize && activeTab === 'active' && (
             <div style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(auto-fill, minmax(40px, 1fr))`,
-              gap: "8px",
-              marginBottom: "2rem",
-              background: "var(--bg-sunken)",
-              border: "1px solid var(--border-subtle)",
-              borderRadius: "var(--r-lg)",
-              padding: "1.5rem",
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              padding: "2rem 0"
             }}>
-              {Array.from({ length: activePrize.total }, (_, i) => i + 1).map((num) => {
-                const isTaken = takenMap[activePrize.id]?.has(num);
-                const isPicked = userPicks[activePrize.id]?.has(num);
-
-                return (
+              <section
+                ref={selectionSectionRef}
+                style={{
+                  width: "100%",
+                  maxWidth: "800px", // Reducimos un poco el ancho máximo para que se vea más compacto y centrado
+                  background: "var(--bg-surface)",
+                  border: "1px solid var(--border-mid)",
+                  borderRadius: "var(--r-xl)",
+                  padding: "3rem 2.5rem",
+                  boxShadow: "var(--card-shadow)",
+                  animation: "fadeUp 0.5s ease",
+                  /* Aseguramos centrado interno */
+                  margin: "0 auto"
+                }}>
+                  
+                <div style={{ marginBottom: "2rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                    <span style={{ fontSize: "1.8rem" }}>{activePrize.emoji}</span>
+                    <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.8rem", fontWeight: 700, margin: 0, color: "var(--text-primary)" }}>
+                      {activePrize.name}
+                    </h2>
+                  </div>
+                  <div className="deco-line">
+                    <div className="deco-diamond"></div>
+                  </div>
+                  <p style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>
+                    Selecciona tus números de la suerte para este sorteo
+                  </p>
+                </div>
+  
+                {/* Grid de Números */}
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(auto-fill, minmax(40px, 1fr))`,
+                  gap: "8px",
+                  marginBottom: "2rem",
+                  background: "var(--bg-sunken)",
+                  border: "1px solid var(--border-subtle)",
+                  borderRadius: "var(--r-lg)",
+                  padding: "1.5rem",
+                }}>
+                  {Array.from({ length: activePrize.total }, (_, i) => i + 1).map((num) => {
+                    const isTaken = takenMap[activePrize.id]?.has(num);
+                    const isPicked = userPicks[activePrize.id]?.has(num);
+  
+                    return (
+                      <button
+                        key={num}
+                        onClick={() => handleNumberClick(num)}
+                        disabled={isTaken}
+                        style={{
+                          height: "44px",
+                          borderRadius: "var(--r-sm)",
+                          border: isTaken ? "1px solid var(--border-subtle)" : isPicked ? `2px solid ${activePrize.color}` : "1px solid var(--border-mid)",
+                          background: isTaken ? "var(--bg-sunken)" : isPicked ? activePrize.color : "var(--bg-elevated)",
+                          color: isTaken ? "var(--text-muted)" : isPicked ? "#fff" : "var(--text-primary)",
+                          fontWeight: 700,
+                          cursor: isTaken ? "not-allowed" : "pointer",
+                          opacity: isTaken ? 0.4 : 1,
+                          transition: "all 0.2s"
+                        }}
+                      >
+                        {isTaken ? "X" : String(num).padStart(2, "0")}
+                      </button>
+                    );
+                  })}
+                </div>
+  
+                {/* Resumen de Reserva */}
+                <div style={{
+                  background: "var(--bg-elevated)",
+                  padding: "1.5rem",
+                  borderRadius: "var(--r-lg)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "1rem"
+                }}>
+                  <div>
+                    <span className="label-xs">Números Seleccionados:</span>
+                    <p style={{ margin: 0, fontSize: "1.2rem", color: "var(--accent-gold)", fontWeight: 700 }}>
+                      {userPicks[activePrize.id]?.size > 0
+                        ? [...userPicks[activePrize.id]].sort((a, b) => a - b).join(" · ")
+                        : "Ninguno"}
+                    </p>
+                  </div>
                   <button
-                    key={num}
-                    onClick={() => handleNumberClick(num)}
-                    disabled={isTaken}
+                    onClick={handleReserve}
+                    disabled={!userPicks[activePrize.id]?.size}
                     style={{
-                      height: "44px",
+                      background: "linear-gradient(135deg, var(--gold-300), var(--gold-500))",
+                      color: "var(--gold-900)",
+                      padding: "0.8rem 2.5rem",
+                      border: "none",
                       borderRadius: "var(--r-sm)",
-                      border: isTaken ? "1px solid var(--border-subtle)" : isPicked ? `2px solid ${activePrize.color}` : "1px solid var(--border-mid)",
-                      background: isTaken ? "var(--bg-sunken)" : isPicked ? activePrize.color : "var(--bg-elevated)",
-                      color: isTaken ? "var(--text-muted)" : isPicked ? "#fff" : "var(--text-primary)",
                       fontWeight: 700,
-                      cursor: isTaken ? "not-allowed" : "pointer",
-                      opacity: isTaken ? 0.4 : 1,
-                      transition: "all 0.2s"
+                      cursor: "pointer",
+                      boxShadow: userPicks[activePrize.id]?.size ? "0 4px 15px rgba(201,168,76,0.3)" : "none",
+                      opacity: userPicks[activePrize.id]?.size ? 1 : 0.5
                     }}
                   >
-                    {isTaken ? "X" : String(num).padStart(2, "0")}
+                    🎟️ Reservar Ahora
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Resumen de Reserva */}
-            <div style={{
-              background: "var(--bg-elevated)",
-              padding: "1.5rem",
-              borderRadius: "var(--r-lg)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "1rem"
-            }}>
-              <div>
-                <span className="label-xs">Números Seleccionados:</span>
-                <p style={{ margin: 0, fontSize: "1.2rem", color: "var(--accent-gold)", fontWeight: 700 }}>
-                  {userPicks[activePrize.id]?.size > 0 
-                    ? [...userPicks[activePrize.id]].sort((a,b)=>a-b).join(" · ") 
-                    : "Ninguno"}
-                </p>
-              </div>
-              <button
-                onClick={handleReserve}
-                disabled={!userPicks[activePrize.id]?.size}
-                style={{
-                  background: "linear-gradient(135deg, var(--gold-300), var(--gold-500))",
-                  color: "var(--gold-900)",
-                  padding: "0.8rem 2.5rem",
-                  border: "none",
-                  borderRadius: "var(--r-sm)",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  boxShadow: userPicks[activePrize.id]?.size ? "0 4px 15px rgba(201,168,76,0.3)" : "none",
-                  opacity: userPicks[activePrize.id]?.size ? 1 : 0.5
-                }}
-              >
-                🎟️ Reservar Ahora
-              </button>
-            </div>
-          </section>
-        )}
-      </main>
-{/* ══════════ PANEL DE PAGO ══════════ */}
-      {showPayment && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "1rem" }}>
-          <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-mid)", borderRadius: "var(--r-xl)", width: "100%", maxWidth: "550px", overflow: "hidden", animation: "slideUp 0.3s var(--ease)" }}>
-            
-            <div style={{ padding: "1.5rem", borderBottom: "1px solid var(--border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem", margin: 0 }}>Método de Pago</h2>
-              <button onClick={() => setShowPayment(false)} style={{ background: "none", border: "none", color: "var(--text-muted)", fontSize: "1.5rem", cursor: "pointer" }}>×</button>
-            </div>
-
-            <div style={{ padding: "2rem" }}>
-              <div style={{ marginBottom: "1.5rem", textAlign: "center", background: "var(--bg-sunken)", padding: "1rem", borderRadius: "var(--r-md)" }}>
-                <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-muted)" }}>Total a pagar por {tempReservation.nums.length} boletos:</p>
-                <h3 style={{ color: "var(--accent-gold)", fontSize: "1.8rem", margin: 0 }}>${tempReservation.total.toFixed(2)}</h3>
-              </div>
-
-              {/* Opciones de Pago */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                
-                {/* PayPhone */}
-                <button onClick={() => setPaymentMethod('payphone')} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem", borderRadius: "var(--r-md)", border: paymentMethod === 'payphone' ? "2px solid #ff6b00" : "1px solid var(--border-mid)", background: "white", cursor: "pointer" }}>
-                  <img src="https://www.payphone.app/wp-content/uploads/2021/05/logo-payphone.png" alt="Payphone" style={{ height: "25px" }} />
-                  <span style={{ fontWeight: 700, color: "#1a1a1a" }}>Pagar con PayPhone</span>
-                </button>
-
-                {/* PayPal */}
-                <button onClick={() => setPaymentMethod('paypal')} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem", borderRadius: "var(--r-md)", border: paymentMethod === 'paypal' ? "2px solid #003087" : "1px solid var(--border-mid)", background: "white", cursor: "pointer" }}>
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" style={{ height: "25px" }} />
-                  <span style={{ fontWeight: 700, color: "#1a1a1a" }}>PayPal / Tarjeta</span>
-                </button>
-
-                {/* Transferencia Bancaria */}
-                <button onClick={() => setPaymentMethod('transfer')} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem", borderRadius: "var(--r-md)", border: paymentMethod === 'transfer' ? "2px solid var(--accent-gold)" : "1px solid var(--border-mid)", background: "var(--bg-sunken)", cursor: "pointer", color: "var(--text-primary)" }}>
-                  <span style={{ fontSize: "1.5rem" }}>🏦</span>
-                  <div style={{ textAlign: "left" }}>
-                    <div style={{ fontWeight: 700 }}>Transferencia Bancaria</div>
-                    <div style={{ fontSize: "0.7rem", opacity: 0.7 }}>Banco Pichincha / Guayaquil / Produbanco</div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Detalles Transferencia */}
-              {paymentMethod === 'transfer' && (
-                <div style={{ marginTop: "1.5rem", padding: "1rem", border: "1px dashed var(--accent-gold)", borderRadius: "var(--r-md)", fontSize: "0.85rem", animation: "fadeIn 0.3s" }}>
-                  <p style={{ fontWeight: 700, color: "var(--accent-gold)", marginBottom: "0.5rem" }}>Datos de la Cuenta:</p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-                    <span><b>Banco:</b> Pichincha (Ahorros)</span>
-                    <span><b>Titular:</b> Sorteos La Fortuna S.A.</span>
-                    <span><b>Cuenta:</b> 2200000000</span>
-                    <span><b>CI/RUC:</b> 0900000000001</span>
-                  </div>
-                  <div style={{ marginTop: "1rem", fontSize: "0.75rem", color: "var(--text-muted)", fontStyle: "italic" }}>
-                    * Una vez realizada, presiona el botón inferior para enviar el comprobante por WhatsApp.
-                  </div>
                 </div>
-              )}
+              </section>
             </div>
+          )}
+        </main>
+      {/* ══════════ PANEL DE PAGO ══════════ */}
+        {showPayment && (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "1rem" }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-mid)", borderRadius: "var(--r-xl)", width: "100%", maxWidth: "550px", overflow: "hidden", animation: "slideUp 0.3s var(--ease)" }}>
 
-            <div style={{ padding: "1.5rem", borderTop: "1px solid var(--border-subtle)", background: "var(--bg-sunken)", display: "flex", gap: "1rem" }}>
-              <button onClick={() => setShowPayment(false)} style={{ flex: 1, padding: "0.8rem", borderRadius: "var(--r-sm)", border: "1px solid var(--border-mid)", background: "none", color: "var(--text-secondary)", fontWeight: 700 }}>Cancelar</button>
-              
-              <button 
-                disabled={!paymentMethod}
-                onClick={() => {
-                  if (paymentMethod === 'transfer') {
-                    window.open(getWhatsAppUrl(tempReservation.prize.name, tempReservation.nums), '_blank');
-                  }
-                  confirmFinalPurchase();
-                }}
-                style={{ flex: 2, padding: "0.8rem", borderRadius: "var(--r-sm)", border: "none", background: paymentMethod ? "var(--accent-gold)" : "#555", color: "var(--gold-900)", fontWeight: 700, cursor: "pointer" }}
-              >
-                {paymentMethod === 'transfer' ? "Confirmar y enviar a WhatsApp 📱" : "Proceder al Pago"}
-              </button>
+              <div style={{ padding: "1.5rem", borderBottom: "1px solid var(--border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem", margin: 0 }}>Método de Pago</h2>
+                <button onClick={() => setShowPayment(false)} style={{ background: "none", border: "none", color: "var(--text-muted)", fontSize: "1.5rem", cursor: "pointer" }}>×</button>
+              </div>
+
+              <div style={{ padding: "2rem" }}>
+                <div style={{ marginBottom: "1.5rem", textAlign: "center", background: "var(--bg-sunken)", padding: "1rem", borderRadius: "var(--r-md)" }}>
+                  <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-muted)" }}>Total a pagar por {tempReservation.nums.length} boletos:</p>
+                  <h3 style={{ color: "var(--accent-gold)", fontSize: "1.8rem", margin: 0 }}>${tempReservation.total.toFixed(2)}</h3>
+                </div>
+
+                {/* Opciones de Pago */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+
+                  {/* PayPhone */}
+                  <button onClick={() => setPaymentMethod('payphone')} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem", borderRadius: "var(--r-md)", border: paymentMethod === 'payphone' ? "2px solid #ff6b00" : "1px solid var(--border-mid)", background: "white", cursor: "pointer" }}>
+                    <img src="https://www.payphone.app/wp-content/uploads/2021/05/logo-payphone.png" alt="Payphone" style={{ height: "25px" }} />
+                    <span style={{ fontWeight: 700, color: "#1a1a1a" }}>Pagar con PayPhone</span>
+                  </button>
+
+                  {/* PayPal */}
+                  <button onClick={() => setPaymentMethod('paypal')} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem", borderRadius: "var(--r-md)", border: paymentMethod === 'paypal' ? "2px solid #003087" : "1px solid var(--border-mid)", background: "white", cursor: "pointer" }}>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" style={{ height: "25px" }} />
+                    <span style={{ fontWeight: 700, color: "#1a1a1a" }}>PayPal / Tarjeta</span>
+                  </button>
+
+                  {/* Transferencia Bancaria */}
+                  <button onClick={() => setPaymentMethod('transfer')} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem", borderRadius: "var(--r-md)", border: paymentMethod === 'transfer' ? "2px solid var(--accent-gold)" : "1px solid var(--border-mid)", background: "var(--bg-sunken)", cursor: "pointer", color: "var(--text-primary)" }}>
+                    <span style={{ fontSize: "1.5rem" }}>🏦</span>
+                    <div style={{ textAlign: "left" }}>
+                      <div style={{ fontWeight: 700 }}>Transferencia Bancaria</div>
+                      <div style={{ fontSize: "0.7rem", opacity: 0.7 }}>Banco Pichincha / Guayaquil / Produbanco</div>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Detalles Transferencia */}
+                {paymentMethod === 'transfer' && (
+                  <div style={{ marginTop: "1.5rem", padding: "1rem", border: "1px dashed var(--accent-gold)", borderRadius: "var(--r-md)", fontSize: "0.85rem", animation: "fadeIn 0.3s" }}>
+                    <p style={{ fontWeight: 700, color: "var(--accent-gold)", marginBottom: "0.5rem" }}>Datos de la Cuenta:</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                      <span><b>Banco:</b> Pichincha (Ahorros)</span>
+                      <span><b>Titular:</b> Sorteos La Fortuna S.A.</span>
+                      <span><b>Cuenta:</b> 2200000000</span>
+                      <span><b>CI/RUC:</b> 0900000000001</span>
+                    </div>
+                    <div style={{ marginTop: "1rem", fontSize: "0.75rem", color: "var(--text-muted)", fontStyle: "italic" }}>
+                      * Una vez realizada, presiona el botón inferior para enviar el comprobante por WhatsApp.
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ padding: "1.5rem", borderTop: "1px solid var(--border-subtle)", background: "var(--bg-sunken)", display: "flex", gap: "1rem" }}>
+                <button onClick={() => setShowPayment(false)} style={{ flex: 1, padding: "0.8rem", borderRadius: "var(--r-sm)", border: "1px solid var(--border-mid)", background: "none", color: "var(--text-secondary)", fontWeight: 700 }}>Cancelar</button>
+
+                <button
+                  disabled={!paymentMethod}
+                  onClick={() => {
+                    if (paymentMethod === 'transfer') {
+                      window.open(getWhatsAppUrl(tempReservation.prize.name, tempReservation.nums), '_blank');
+                    }
+                    confirmFinalPurchase();
+                  }}
+                  style={{ flex: 2, padding: "0.8rem", borderRadius: "var(--r-sm)", border: "none", background: paymentMethod ? "var(--accent-gold)" : "#555", color: "var(--gold-900)", fontWeight: 700, cursor: "pointer" }}
+                >
+                  {paymentMethod === 'transfer' ? "Confirmar y enviar a WhatsApp 📱" : "Proceder al Pago"}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ══════════ MODAL SUCCESS ══════════ */}
-      {modal && (
-        <div
-          onClick={() => setModal(null)}
-          style={{
-            position: "fixed", inset: 0,
-            background: "rgba(0,0,0,0.7)",
-            backdropFilter: "blur(6px)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            zIndex: 999, padding: "1rem",
-            animation: "fadeIn 0.25s ease",
-          }}
-        >
+        {/* ══════════ MODAL SUCCESS ══════════ */}
+        {modal && (
           <div
-            onClick={(e) => e.stopPropagation()}
+            onClick={() => setModal(null)}
             style={{
-              background: "var(--bg-elevated)",
-              border: "1px solid var(--border-mid)",
-              borderRadius: "var(--r-xl)",
-              width: "100%", maxWidth: "500px",
-              overflow: "hidden",
-              animation: "slideUp 0.3s var(--ease)",
+              position: "fixed", inset: 0,
+              background: "rgba(0,0,0,0.7)",
+              backdropFilter: "blur(6px)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              zIndex: 999, padding: "1rem",
+              animation: "fadeIn 0.25s ease",
             }}
           >
-            {/* Modal header */}
-            <div style={{
-              padding: "1.5rem 2rem",
-              borderBottom: "1px solid var(--border-subtle)",
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              background: "var(--bg-elevated)",
-            }}>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "1.4rem", fontWeight: 700,
-                color: "var(--text-primary)", margin: 0,
-              }}>
-                🎉 ¡Reserva Exitosa!
-              </h2>
-              <button
-                onClick={() => setModal(null)}
-                style={{
-                  width: "32px", height: "32px",
-                  background: "var(--chip-bg)",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "50%",
-                  color: "var(--text-muted)", fontSize: "1.1rem",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  cursor: "pointer", transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--accent-ruby)";
-                  e.currentTarget.style.color = "#fff";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "var(--chip-bg)";
-                  e.currentTarget.style.color = "var(--text-muted)";
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Modal body */}
-            <div style={{ padding: "2rem", textAlign: "center" }}>
-              <div style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>🎊</div>
-
-              <p style={{
-                color: "var(--text-secondary)",
-                marginBottom: "1.5rem", fontSize: "0.9rem",
-              }}>
-                Has reservado números para{" "}
-                <span style={{
-                  color: "var(--accent-gold)", fontWeight: 700,
-                  fontFamily: "'Cinzel', serif",
-                }}>
-                  {modal.prize.name}
-                </span>
-              </p>
-
-              {/* Numbers box */}
-              <div style={{
-                background: "var(--bg-sunken)",
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "var(--bg-elevated)",
                 border: "1px solid var(--border-mid)",
-                borderRadius: "var(--r-lg)",
-                padding: "1.5rem",
-                marginBottom: "1.5rem",
+                borderRadius: "var(--r-xl)",
+                width: "100%", maxWidth: "500px",
+                overflow: "hidden",
+                animation: "slideUp 0.3s var(--ease)",
+              }}
+            >
+              {/* Modal header */}
+              <div style={{
+                padding: "1.5rem 2rem",
+                borderBottom: "1px solid var(--border-subtle)",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "var(--bg-elevated)",
               }}>
-                <div className="label-xs" style={{ marginBottom: "0.75rem" }}>
-                  Tus Números de Suerte
-                </div>
-                {/* Art-deco divider */}
-                <div style={{
-                  display: "flex", alignItems: "center",
-                  gap: "0.5rem", marginBottom: "0.75rem",
+                <h2 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1.4rem", fontWeight: 700,
+                  color: "var(--text-primary)", margin: 0,
                 }}>
-                  <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
-                  <div style={{ width: "6px", height: "6px", background: "var(--accent-gold)", transform: "rotate(45deg)", flexShrink: 0 }} />
-                  <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
-                </div>
+                  🎉 ¡Reserva Exitosa!
+                </h2>
+                <button
+                  onClick={() => setModal(null)}
+                  style={{
+                    width: "32px", height: "32px",
+                    background: "var(--chip-bg)",
+                    border: "1px solid var(--border-subtle)",
+                    borderRadius: "50%",
+                    color: "var(--text-muted)", fontSize: "1.1rem",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: "pointer", transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "var(--accent-ruby)";
+                    e.currentTarget.style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "var(--chip-bg)";
+                    e.currentTarget.style.color = "var(--text-muted)";
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Modal body */}
+              <div style={{ padding: "2rem", textAlign: "center" }}>
+                <div style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>🎊</div>
+
                 <p style={{
-                  margin: 0,
-                  fontSize: "1.8rem",
-                  fontFamily: "'Cinzel', serif", fontWeight: 700,
-                  color: "var(--accent-gold)", letterSpacing: "0.1em",
+                  color: "var(--text-secondary)",
+                  marginBottom: "1.5rem", fontSize: "0.9rem",
                 }}>
-                  {modal.nums.sort((a, b) => a - b).join(" · ")}
+                  Has reservado números para{" "}
+                  <span style={{
+                    color: "var(--accent-gold)", fontWeight: 700,
+                    fontFamily: "'Cinzel', serif",
+                  }}>
+                    {modal.prize.name}
+                  </span>
+                </p>
+
+                {/* Numbers box */}
+                <div style={{
+                  background: "var(--bg-sunken)",
+                  border: "1px solid var(--border-mid)",
+                  borderRadius: "var(--r-lg)",
+                  padding: "1.5rem",
+                  marginBottom: "1.5rem",
+                }}>
+                  <div className="label-xs" style={{ marginBottom: "0.75rem" }}>
+                    Tus Números de Suerte
+                  </div>
+                  {/* Art-deco divider */}
+                  <div style={{
+                    display: "flex", alignItems: "center",
+                    gap: "0.5rem", marginBottom: "0.75rem",
+                  }}>
+                    <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
+                    <div style={{ width: "6px", height: "6px", background: "var(--accent-gold)", transform: "rotate(45deg)", flexShrink: 0 }} />
+                    <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
+                  </div>
+                  <p style={{
+                    margin: 0,
+                    fontSize: "1.8rem",
+                    fontFamily: "'Cinzel', serif", fontWeight: 700,
+                    color: "var(--accent-gold)", letterSpacing: "0.1em",
+                  }}>
+                    {modal.nums.sort((a, b) => a - b).join(" · ")}
+                  </p>
+                </div>
+
+                <p style={{
+                  color: "var(--text-muted)", fontSize: "0.78rem",
+                  marginBottom: "1.5rem",
+                }}>
+                  Guarda una captura de pantalla como comprobante 📸
                 </p>
               </div>
 
-              <p style={{
-                color: "var(--text-muted)", fontSize: "0.78rem",
-                marginBottom: "1.5rem",
+              {/* Modal footer */}
+              <div style={{
+                padding: "1.25rem 2rem",
+                borderTop: "1px solid var(--border-subtle)",
+                display: "flex", justifyContent: "flex-end", gap: "0.75rem",
+                background: "var(--bg-elevated)",
               }}>
-                Guarda una captura de pantalla como comprobante 📸
-              </p>
-            </div>
-
-            {/* Modal footer */}
-            <div style={{
-              padding: "1.25rem 2rem",
-              borderTop: "1px solid var(--border-subtle)",
-              display: "flex", justifyContent: "flex-end", gap: "0.75rem",
-              background: "var(--bg-elevated)",
-            }}>
-              <button
-                onClick={() => setModal(null)}
-                style={{
-                  background: "var(--chip-bg)",
-                  color: "var(--text-secondary)",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "var(--r-sm)",
-                  padding: "0.6rem 1.2rem",
-                  fontSize: "0.78rem", fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.08em",
-                  cursor: "pointer", transition: "all 0.3s",
-                  fontFamily: "var(--font-body)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border-accent)";
-                  e.currentTarget.style.color = "var(--accent-gold)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border-subtle)";
-                  e.currentTarget.style.color = "var(--text-secondary)";
-                }}
-              >
-                Cerrar
-              </button>
-              <button
-                onClick={() => setModal(null)}
-                style={{
-                  background: "linear-gradient(135deg, var(--gold-300), var(--gold-500))",
-                  color: "var(--gold-900)", border: "none",
-                  borderRadius: "var(--r-sm)",
-                  padding: "0.6rem 1.4rem",
-                  fontSize: "0.8rem", fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.1em",
-                  cursor: "pointer", transition: "all 0.3s",
-                  fontFamily: "var(--font-body)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(201,168,76,0.35)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "";
-                  e.currentTarget.style.boxShadow = "";
-                }}
-              >
-                ✦ ¡Entendido!
-              </button>
+                <button
+                  onClick={() => setModal(null)}
+                  style={{
+                    background: "var(--chip-bg)",
+                    color: "var(--text-secondary)",
+                    border: "1px solid var(--border-subtle)",
+                    borderRadius: "var(--r-sm)",
+                    padding: "0.6rem 1.2rem",
+                    fontSize: "0.78rem", fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.08em",
+                    cursor: "pointer", transition: "all 0.3s",
+                    fontFamily: "var(--font-body)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--border-accent)";
+                    e.currentTarget.style.color = "var(--accent-gold)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--border-subtle)";
+                    e.currentTarget.style.color = "var(--text-secondary)";
+                  }}
+                >
+                  Cerrar
+                </button>
+                <button
+                  onClick={() => setModal(null)}
+                  style={{
+                    background: "linear-gradient(135deg, var(--gold-300), var(--gold-500))",
+                    color: "var(--gold-900)", border: "none",
+                    borderRadius: "var(--r-sm)",
+                    padding: "0.6rem 1.4rem",
+                    fontSize: "0.8rem", fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.1em",
+                    cursor: "pointer", transition: "all 0.3s",
+                    fontFamily: "var(--font-body)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(201,168,76,0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "";
+                    e.currentTarget.style.boxShadow = "";
+                  }}
+                >
+                  ✦ ¡Entendido!
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ══════════ FOOTER ══════════ */}
-      <footer style={{
-        background: "var(--bg-sunken)",
-        borderTop: "1px solid var(--border-mid)",
-        padding: "3rem 5% 2rem",
-        position: "relative", overflow: "hidden",
-      }}>
-        {/* Lattice */}
-        <div style={{
-          position: "absolute", inset: 0, zIndex: 0,
-          backgroundImage: `repeating-linear-gradient(45deg, transparent 0px, transparent 40px, rgba(201,168,76,0.02) 40px, rgba(201,168,76,0.02) 41px)`,
-        }} />
-
-        <div style={{ maxWidth: "960px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* ══════════ FOOTER ══════════ */}
+        <footer style={{
+          background: "var(--bg-sunken)",
+          borderTop: "1px solid var(--border-mid)",
+          padding: "3rem 5% 2rem",
+          position: "relative", overflow: "hidden",
+        }}>
+          {/* Lattice */}
           <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "3rem",
-            marginBottom: "3rem",
-          }}>
-            {/* Brand */}
-            <div>
-              <div style={{
-                fontFamily: "'Cinzel', serif",
-                fontSize: "1.3rem", fontWeight: 700,
-                letterSpacing: "0.08em", color: "var(--accent-gold)",
-                marginBottom: "1rem",
-              }}>
-                ♦ Sorteos<span style={{ color: "var(--accent-ruby)" }}>VIP</span>
+            position: "absolute", inset: 0, zIndex: 0,
+            backgroundImage: `repeating-linear-gradient(45deg, transparent 0px, transparent 40px, rgba(201,168,76,0.02) 40px, rgba(201,168,76,0.02) 41px)`,
+          }} />
+
+          <div style={{ maxWidth: "960px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "3rem",
+              marginBottom: "3rem",
+            }}>
+              {/* Brand */}
+              <div>
+                <div style={{
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: "1.3rem", fontWeight: 700,
+                  letterSpacing: "0.08em", color: "var(--accent-gold)",
+                  marginBottom: "1rem",
+                }}>
+                  ♦ Sorteos<span style={{ color: "var(--accent-ruby)" }}>VIP</span>
+                </div>
+                <p style={{
+                  color: "var(--text-muted)",
+                  fontSize: "0.85rem", lineHeight: 1.7,
+                }}>
+                  Llevando alegría y premios increíbles a todos nuestros participantes
+                  desde Guayaquil para todo el país.
+                </p>
+                <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.25rem" }}>
+                  {[["f", "Facebook"], ["ig", "Instagram"], ["wa", "WhatsApp"]].map(([abbr, label]) => (
+                    <div
+                      key={abbr}
+                      title={label}
+                      style={{
+                        width: "32px", height: "32px", borderRadius: "50%",
+                        background: "var(--chip-bg)",
+                        border: "1px solid var(--border-subtle)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: "pointer", transition: "0.3s",
+                        fontFamily: "'Cinzel', serif",
+                        fontSize: "0.7rem", color: "var(--text-muted)",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "var(--border-accent)";
+                        e.currentTarget.style.color = "var(--accent-gold)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "var(--border-subtle)";
+                        e.currentTarget.style.color = "var(--text-muted)";
+                      }}
+                    >
+                      {abbr}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <p style={{
-                color: "var(--text-muted)",
-                fontSize: "0.85rem", lineHeight: 1.7,
-              }}>
-                Llevando alegría y premios increíbles a todos nuestros participantes
-                desde Guayaquil para todo el país.
-              </p>
-              <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.25rem" }}>
-                {[["f", "Facebook"], ["ig", "Instagram"], ["wa", "WhatsApp"]].map(([abbr, label]) => (
-                  <div
-                    key={abbr}
-                    title={label}
-                    style={{
-                      width: "32px", height: "32px", borderRadius: "50%",
+
+              {/* Payment methods */}
+              <div>
+                <h4 className="label-xs" style={{ marginBottom: "1.25rem", color: "var(--accent-gold)" }}>
+                  Métodos de Pago
+                </h4>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                  {["💳 Visa", "💳 Mastercard", "🏦 Transferencia", "📱 Deuna!"].map((m) => (
+                    <span key={m} style={{
                       background: "var(--chip-bg)",
                       border: "1px solid var(--border-subtle)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: "pointer", transition: "0.3s",
-                      fontFamily: "'Cinzel', serif",
-                      fontSize: "0.7rem", color: "var(--text-muted)",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "var(--border-accent)";
-                      e.currentTarget.style.color = "var(--accent-gold)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "var(--border-subtle)";
-                      e.currentTarget.style.color = "var(--text-muted)";
-                    }}
-                  >
-                    {abbr}
-                  </div>
-                ))}
+                      color: "var(--text-secondary)",
+                      padding: "0.35rem 0.75rem",
+                      borderRadius: "var(--r-sm)",
+                      fontSize: "0.72rem", fontWeight: 700,
+                    }}>
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Legal */}
+              <div>
+                <h4 className="label-xs" style={{ marginBottom: "1.25rem", color: "var(--accent-gold)" }}>
+                  Información
+                </h4>
+                <ul style={{
+                  listStyle: "none", padding: 0, margin: 0,
+                  fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: "2",
+                }}>
+                  {["Términos y Condiciones", "Preguntas Frecuentes", "Contacto directo"].map((item) => (
+                    <li
+                      key={item}
+                      style={{ cursor: "pointer", transition: "color 0.2s" }}
+                      onMouseEnter={(e) => { e.target.style.color = "var(--accent-gold)"; }}
+                      onMouseLeave={(e) => { e.target.style.color = "var(--text-muted)"; }}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            {/* Payment methods */}
-            <div>
-              <h4 className="label-xs" style={{ marginBottom: "1.25rem", color: "var(--accent-gold)" }}>
-                Métodos de Pago
-              </h4>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {["💳 Visa", "💳 Mastercard", "🏦 Transferencia", "📱 Deuna!"].map((m) => (
-                  <span key={m} style={{
-                    background: "var(--chip-bg)",
-                    border: "1px solid var(--border-subtle)",
-                    color: "var(--text-secondary)",
-                    padding: "0.35rem 0.75rem",
-                    borderRadius: "var(--r-sm)",
-                    fontSize: "0.72rem", fontWeight: 700,
-                  }}>
-                    {m}
-                  </span>
-                ))}
-              </div>
+            {/* Art-deco divider */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0 0 1.5rem" }}>
+              <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
+              <div style={{ width: "8px", height: "8px", background: "var(--accent-gold)", transform: "rotate(45deg)", flexShrink: 0 }} />
+              <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
             </div>
 
-            {/* Legal */}
-            <div>
-              <h4 className="label-xs" style={{ marginBottom: "1.25rem", color: "var(--accent-gold)" }}>
-                Información
-              </h4>
-              <ul style={{
-                listStyle: "none", padding: 0, margin: 0,
-                fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: "2",
-              }}>
-                {["Términos y Condiciones", "Preguntas Frecuentes", "Contacto directo"].map((item) => (
-                  <li
-                    key={item}
-                    style={{ cursor: "pointer", transition: "color 0.2s" }}
-                    onMouseEnter={(e) => { e.target.style.color = "var(--accent-gold)"; }}
-                    onMouseLeave={(e) => { e.target.style.color = "var(--text-muted)"; }}
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
+            <div style={{ textAlign: "center" }}>
+              <p style={{ margin: "0 0 0.5rem", fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                © 2026 SorteosVIP · Todos los derechos reservados · Ecuador
+              </p>
+              <p style={{ margin: 0, fontSize: "0.7rem", color: "var(--text-muted)", opacity: 0.7 }}>
+                🔞 Solo para mayores de 18 años. Juega responsablemente.
+              </p>
             </div>
           </div>
+        </footer>
 
-          {/* Art-deco divider */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0 0 1.5rem" }}>
-            <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
-            <div style={{ width: "8px", height: "8px", background: "var(--accent-gold)", transform: "rotate(45deg)", flexShrink: 0 }} />
-            <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, var(--border-mid), transparent)" }} />
-          </div>
-
-          <div style={{ textAlign: "center" }}>
-            <p style={{ margin: "0 0 0.5rem", fontSize: "0.75rem", color: "var(--text-muted)" }}>
-              © 2026 SorteosVIP · Todos los derechos reservados · Ecuador
-            </p>
-            <p style={{ margin: 0, fontSize: "0.7rem", color: "var(--text-muted)", opacity: 0.7 }}>
-              🔞 Solo para mayores de 18 años. Juega responsablemente.
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* ── Keyframes (scoped) ── */}
-      <style>{`
+        {/* ── Keyframes (scoped) ── */}
+        <style>{`
         @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeUp  { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
